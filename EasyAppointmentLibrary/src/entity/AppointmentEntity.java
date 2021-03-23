@@ -1,51 +1,54 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package entity;
 
 import java.io.Serializable;
+import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
-/**
- *
- * @author zhijun
- */
 @Entity
 public class AppointmentEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long appointmentId;
+    private String appointmentNo;
+    private Date appointmentDate;
+    private Date appointmentTime;
+//    @ManyToOne
+//    private CustomerEntity customerEntity;
+    @ManyToOne
+    private ServiceProviderEntity serviceProviderEntity;
 
-    public Long getId() {
-        return id;
+    public AppointmentEntity() {
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public Long getAppointmentId() {
+        return appointmentId;
+    }
+
+    public void setAppointmentId(Long appointmentId) {
+        this.appointmentId = appointmentId;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
+        hash += (appointmentId != null ? appointmentId.hashCode() : 0);
         return hash;
     }
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
+        // TODO: Warning - this method won't work in the case the appointmentId fields are not set
         if (!(object instanceof AppointmentEntity)) {
             return false;
         }
         AppointmentEntity other = (AppointmentEntity) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+        if ((this.appointmentId == null && other.appointmentId != null) || (this.appointmentId != null && !this.appointmentId.equals(other.appointmentId))) {
             return false;
         }
         return true;
@@ -53,7 +56,7 @@ public class AppointmentEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "entity.AppointmentEntity[ id=" + id + " ]";
+        return "entity.AppointmentEntity[ id=" + appointmentId + " ]";
     }
     
 }
