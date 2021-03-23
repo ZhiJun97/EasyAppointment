@@ -18,6 +18,7 @@ public class AppointmentEntity implements Serializable {
     private String appointmentNo;
     private Date appointmentDate;
     private Date appointmentTime;
+    private int test;
 //    @ManyToOne
 //    private CustomerEntity customerEntity;
     @ManyToOne
