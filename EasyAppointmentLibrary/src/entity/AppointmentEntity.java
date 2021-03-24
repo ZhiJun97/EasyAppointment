@@ -7,6 +7,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 @Entity
 public class AppointmentEntity implements Serializable {
@@ -16,14 +18,32 @@ public class AppointmentEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long appointmentId;
     private String appointmentNo;
+    @Temporal(TemporalType.DATE)
     private Date appointmentDate;
+    @Temporal(TemporalType.TIME)
     private Date appointmentTime;
-//    @ManyToOne
-//    private CustomerEntity customerEntity;
+    @ManyToOne
+    private CustomerEntity customerEntity;
     @ManyToOne
     private ServiceProviderEntity serviceProviderEntity;
 
     public AppointmentEntity() {
+    }
+
+    public AppointmentEntity(String appointmentNo, Date appointmentDate, Date appointmentTime) {
+        this();
+        this.appointmentNo = appointmentNo;
+        this.appointmentDate = appointmentDate;
+        this.appointmentTime = appointmentTime;
+    }
+
+    public AppointmentEntity(String appointmentNo, Date appointmentDate, Date appointmentTime, CustomerEntity customerEntity, ServiceProviderEntity serviceProviderEntity) {
+        this();
+        this.appointmentNo = appointmentNo;
+        this.appointmentDate = appointmentDate;
+        this.appointmentTime = appointmentTime;
+        this.customerEntity = customerEntity;
+        this.serviceProviderEntity = serviceProviderEntity;
     }
 
     public Long getAppointmentId() {
@@ -33,6 +53,32 @@ public class AppointmentEntity implements Serializable {
     public void setAppointmentId(Long appointmentId) {
         this.appointmentId = appointmentId;
     }
+
+    public String getAppointmentNo() {
+        return appointmentNo;
+    }
+
+    public void setAppointmentNo(String appointmentNo) {
+        this.appointmentNo = appointmentNo;
+    }
+
+    public Date getAppointmentDate() {
+        return appointmentDate;
+    }
+
+    public void setAppointmentDate(Date appointmentDate) {
+        this.appointmentDate = appointmentDate;
+    }
+
+    public Date getAppointmentTime() {
+        return appointmentTime;
+    }
+
+    public void setAppointmentTime(Date appointmentTime) {
+        this.appointmentTime = appointmentTime;
+    }
+    
+    
 
     @Override
     public int hashCode() {
