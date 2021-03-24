@@ -13,39 +13,39 @@ import javax.persistence.Id;
 
 /**
  *
- * @author ivanlim
+ * @author user
  */
 @Entity
 public class ServiceProviderEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long serviceProviderId;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
-    public Long getServiceProviderId() {
-        return serviceProviderId;
+    public Long getId() {
+        return id;
     }
 
-    public void setServiceProviderId(Long serviceProviderId) {
-        this.serviceProviderId = serviceProviderId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (serviceProviderId != null ? serviceProviderId.hashCode() : 0);
+        hash += (id != null ? id.hashCode() : 0);
         return hash;
     }
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the serviceProviderId fields are not set
+        // TODO: Warning - this method won't work in the case the id fields are not set
         if (!(object instanceof ServiceProviderEntity)) {
             return false;
         }
         ServiceProviderEntity other = (ServiceProviderEntity) object;
-        if ((this.serviceProviderId == null && other.serviceProviderId != null) || (this.serviceProviderId != null && !this.serviceProviderId.equals(other.serviceProviderId))) {
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
         return true;
@@ -53,7 +53,7 @@ public class ServiceProviderEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "entity.ServiceProviderEntity[ id=" + serviceProviderId + " ]";
+        return "entity.ServiceProviderEntity[ id=" + id + " ]";
     }
     
 }
