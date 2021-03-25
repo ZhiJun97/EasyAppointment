@@ -8,7 +8,6 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import util.enumeration.BusinessCategoryEnum;
 import util.enumeration.StatusEnum;
 
 /**
@@ -24,8 +23,7 @@ public class ServiceProviderEntity implements Serializable {
     private Long uniqueIdNumber; //UIN
     @Column(unique = true, nullable = false)
     private String businessRegNumber;
-    @Enumerated(EnumType.STRING)
-    private BusinessCategoryEnum businessCategoryEnum;
+    private String businessCategory;
     private String name;
     private String address;
     private String city;
@@ -38,9 +36,9 @@ public class ServiceProviderEntity implements Serializable {
 
     public ServiceProviderEntity() {}
     
-    public ServiceProviderEntity(String businessRegNumber, BusinessCategoryEnum businessCategoryEnum, String name, String address, String city, String emailAddress, String password) {
+    public ServiceProviderEntity(String businessRegNumber, String businessCategory, String name, String address, String city, String emailAddress, String password) {
         this.businessRegNumber = businessRegNumber;
-        this.businessCategoryEnum = businessCategoryEnum;
+        this.businessCategory = businessCategory;
         this.name = name;
         this.address = address;
         this.city = city;
@@ -97,12 +95,12 @@ public class ServiceProviderEntity implements Serializable {
         this.businessRegNumber = businessRegNumber;
     }
 
-    public BusinessCategoryEnum getBusinessCategoryEnum() {
-        return businessCategoryEnum;
+    public String getBusinessCategory() {
+        return businessCategory;
     }
 
-    public void setBusinessCategoryEnum(BusinessCategoryEnum businessCategoryEnum) {
-        this.businessCategoryEnum = businessCategoryEnum;
+    public void setBusinessCategory(String businessCategory) {
+        this.businessCategory = businessCategory;
     }
 
     public String getName() {
