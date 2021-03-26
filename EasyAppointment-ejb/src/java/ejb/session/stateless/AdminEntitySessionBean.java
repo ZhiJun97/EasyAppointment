@@ -23,10 +23,6 @@ public class AdminEntitySessionBean implements AdminEntitySessionBeanRemote, Adm
 
     @PersistenceContext(unitName = "EasyAppointment-ejbPU")
     private EntityManager em;
-
-    public void persist(Object object) {
-        em.persist(object);
-    }
     
     @Override
     public Long createAdminEntity(AdminEntity adminEntity) {
