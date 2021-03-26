@@ -1,9 +1,8 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package ejb.session.stateless;
+
+import entity.AdminEntity;
+import util.exception.AdminNotFoundException;
+import util.exception.InvalidLoginCredentialException;
 
 
 /**
@@ -11,5 +10,17 @@ package ejb.session.stateless;
  * @author zhijun
  */
 public interface AdminEntitySessionBeanLocal {
+
+    public Long createAdminEntity(AdminEntity adminEntity);
+
+    public AdminEntity retrieveAdminByEmail(String email) throws AdminNotFoundException;
+
+    public AdminEntity retrieveAdminById(Long id) throws AdminNotFoundException;
+
+    public AdminEntity adminLogin(String email, String password) throws InvalidLoginCredentialException;
+
+    public void updateAdmin(AdminEntity adminEntity);
+
+    public void deleteAdmin(Long id);
     
 }
