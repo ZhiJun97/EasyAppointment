@@ -15,8 +15,8 @@ public class Main {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        String string = "Test";
-        System.out.println(string);
+        Startup startup = new Startup();
+        startup.start();
     }
     
 }
