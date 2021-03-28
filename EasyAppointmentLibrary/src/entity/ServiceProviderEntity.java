@@ -1,6 +1,7 @@
 package entity;
 
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -8,6 +9,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import util.enumeration.StatusEnum;
 
 /**
@@ -33,6 +35,8 @@ public class ServiceProviderEntity implements Serializable {
     private String password;
     @Enumerated(EnumType.STRING)
     private StatusEnum statusEnum;
+    @OneToMany(mappedBy = "serviceProviderEntity")
+    private List<AppointmentEntity> appointmentEntity;
 
     public ServiceProviderEntity() {}
     
@@ -44,6 +48,18 @@ public class ServiceProviderEntity implements Serializable {
         this.city = city;
         this.emailAddress = emailAddress;
         this.password = password;
+    }
+
+    public ServiceProviderEntity(String businessRegNumber, String businessCategory, String name, String address, String city, String emailAddress, String password, StatusEnum statusEnum, List<AppointmentEntity> appointmentEntity) {
+        this.businessRegNumber = businessRegNumber;
+        this.businessCategory = businessCategory;
+        this.name = name;
+        this.address = address;
+        this.city = city;
+        this.emailAddress = emailAddress;
+        this.password = password;
+        this.statusEnum = statusEnum;
+        this.appointmentEntity = appointmentEntity;
     }
 
     public Long getServiceProviderId() {

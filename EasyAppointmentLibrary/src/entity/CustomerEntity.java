@@ -5,6 +5,7 @@
  */
 package entity;
 
+import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -29,10 +30,9 @@ public class CustomerEntity {
     private String phone;
     private String address;
     private String city;
-    private String emailAddress;
-    
-    @OneToMany
-    private AppointmentEntity appointmentEntity;
+    private String emailAddress;    
+    @OneToMany(mappedBy = "customerEntity")
+    private List<AppointmentEntity> appointmentEntity;
 
     public CustomerEntity() {
     }
@@ -51,6 +51,20 @@ public class CustomerEntity {
         this.address = address;
         this.city = city;
         this.emailAddress = emailAddress;
+    }
+
+    public CustomerEntity(String indentityNo, String password, String firstName, String lastName, String gender, Integer age, String phone, String address, String city, String emailAddress, List<AppointmentEntity> appointmentEntity) {
+        this.indentityNo = indentityNo;
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.gender = gender;
+        this.age = age;
+        this.phone = phone;
+        this.address = address;
+        this.city = city;
+        this.emailAddress = emailAddress;
+        this.appointmentEntity = appointmentEntity;
     }
 
     public Long getId() {
