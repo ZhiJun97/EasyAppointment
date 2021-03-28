@@ -1,2 +1,8 @@
 /EasyAppointmentLibrary/dist/
 /EasyAppointmentLibrary/build/
+/dist/
+/build/
+/EasyAppointmentClient/dist/
+/EasyAppointmentClient/build/
+/EasyAppointment-ejb/build/
+/EasyAppointment-ejb/dist/
