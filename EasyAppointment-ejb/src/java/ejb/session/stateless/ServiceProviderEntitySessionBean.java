@@ -97,7 +97,7 @@ public class ServiceProviderEntitySessionBean implements ServiceProviderEntitySe
             ServiceProviderEntity serviceProviderEntity = retrieveServiceProviderByUniqueIdNumber(uniqueIdNumber);
             em.remove(serviceProviderEntity);
         } catch (ServiceProviderNotFoundException ex) {
-            throw new ServiceProviderNotFoundException("Unique ID Number " + uniqueIdNumber + " does not exist!");
+            System.out.println("Unique ID Number " + uniqueIdNumber + " does not exist!" + ex.getMessage());
         }
     }
 }
