@@ -7,6 +7,7 @@ package easyappointmentclient;
 
 import ejb.session.stateless.AdminEntitySessionBeanRemote;
 import ejb.session.stateless.ServiceProviderEntitySessionBeanRemote;
+import ejb.session.stateless.CustomerEntitySessionBeanRemote;
 import entity.AdminEntity;
 import entity.CustomerEntity;
 import entity.ServiceProviderEntity;
@@ -125,13 +126,12 @@ public class Startup {
             } else {
                 throw new InvalidLoginCredentialException("Missing login credentials");
             }
-//        } if (entity.equals("Customer")) {
-//            if (email.length() > 0 && password.length() > 0) {
-//                customerEntity = customerEntitySessionBeanRemote.customerLogin(email, password);
-//            } else {
-//                throw new InvalidLoginCredentialException("Missing login credentials");
-//            }
+        } if (entity.equals("Customer")) {
+            if (email.length() > 0 && password.length() > 0) {
+                customerEntity = CustomerEntitySessionBeanRemote.customerLogin(email, password);
+            } else {
+                throw new InvalidLoginCredentialException("Missing login credentials");
+            }
         }
-    }
-    
+    } 
 }
