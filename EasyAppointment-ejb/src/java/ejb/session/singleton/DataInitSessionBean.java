@@ -34,7 +34,7 @@ public class DataInitSessionBean {
     {
         try
         {
-            adminEntitySessionBeanLocal.retrieveAdminByEmail("admin@easyappt.com");
+            adminEntitySessionBeanLocal.retrieveAdminByEmail("admin@easyadm.com");
         }
         catch(AdminNotFoundException ex)
         {
