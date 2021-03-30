@@ -40,10 +40,9 @@ public class CustomerEntity {
     public CustomerEntity() {
     }
 
-    public CustomerEntity(Long id, String indentityNo, String password, String firstName, String lastName, String gender, Integer age, String phone, String address, String city, String emailAddress) {
+    public CustomerEntity(String indentityNo, String password, String firstName, String lastName, String gender, Integer age, String phone, String address, String city, String emailAddress) {
         this();
         
-        this.id = id;
         this.indentityNo = indentityNo;
         this.password = password;
         this.firstName = firstName;
