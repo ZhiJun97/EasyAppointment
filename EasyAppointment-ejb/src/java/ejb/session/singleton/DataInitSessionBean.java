@@ -24,6 +24,8 @@ public class DataInitSessionBean {
     private AppointmentEntitySessionBeanLocal appointmentEntitySessionBeanLocal;
     @EJB(name = "ServiceProviderEntitySessionBeanLocal")
     private ServiceProviderEntitySessionBeanLocal serviceProviderEntitySessionBeanLocal;
+    @EJB(name = "CustomerEntitySessionBeanLocal")
+    private CustomerEntitySessionBeanLocal customerEntitySessionBeanLocal;
     
     public DataInitSessionBean()
     {
