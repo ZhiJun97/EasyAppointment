@@ -51,11 +51,11 @@ public class Startup {
                     sc.nextLine();
                 }
                 if (response == 1) {
-                    adminTerminal();
+                    loginTerminal("Admin");
                 } else if (response == 2) {
-                    //service provider login
+                    loginTerminal("Service Provider");
                 } else if (response == 3) {
-                    //customer login
+                    loginTerminal("Customer");
                 } else if (response == 4) {
                     System.out.println("Goodbye!");
                 } else {
@@ -68,12 +68,12 @@ public class Startup {
         }
     }
     
-    public void adminTerminal() {
+    public void loginTerminal(String entity) {
         Scanner sc = new Scanner(System.in);
         Integer response = 0;
         
         while (true) {
-            System.out.println("*** Welcome to Admin terminal ***\n");
+            System.out.println("*** Welcome to " + entity + " terminal ***\n");
             System.out.println("1: Login");
             System.out.println("2: Exit\n");
             response = 0;
@@ -87,13 +87,13 @@ public class Startup {
                 }
                 if (response == 1) {
                     try {
-                        adminLogin();
+                        login(entity);
                         System.out.println("Login successful!");
                     } catch (InvalidLoginCredentialException ex) {
                         System.out.println("Login error! " + ex.getMessage() + "\n");
                     }
                 } else if (response == 2) {
-                    System.out.println("Returning to main page...");
+                    System.out.println("Returning to main page...\n");
                 } else {
                     System.out.println("Invalid option! Please try again!\n");
                     break;
@@ -104,19 +104,33 @@ public class Startup {
         }
     }
     
-    public void adminLogin() throws InvalidLoginCredentialException {
+    public void login(String entity) throws InvalidLoginCredentialException {
         Scanner sc = new Scanner(System.in);
         
-        System.out.println("*** Admin terminal :: Login ***\n");
+        System.out.println("*** " + entity + " terminal :: Login ***\n");
         System.out.print("Enter Email Address> ");
         String email = sc.nextLine().trim();
         System.out.print("Enter password> ");
         String password = sc.nextLine().trim();
         
-        if (email.length() > 0 && password.length() > 0) {
-            adminEntity = adminEntitySessionBeanRemote.adminLogin(email, password);
-        } else {
-            throw new InvalidLoginCredentialException("Missing login credentials");
+        if (entity.equals("Admin")) {
+            if (email.length() > 0 && password.length() > 0) {
+                adminEntity = adminEntitySessionBeanRemote.adminLogin(email, password);
+            } else {
+                throw new InvalidLoginCredentialException("Missing login credentials");
+            }
+        } if (entity.equals("Service Provider")) {
+            if (email.length() > 0 && password.length() > 0) {
+                serviceProviderEntity = serviceProviderEntitySessionBeanRemote.serviceProviderLogin(email, password);
+            } else {
+                throw new InvalidLoginCredentialException("Missing login credentials");
+            }
+//        } if (entity.equals("Customer")) {
+//            if (email.length() > 0 && password.length() > 0) {
+//                customerEntity = customerEntitySessionBeanRemote.customerLogin(email, password);
+//            } else {
+//                throw new InvalidLoginCredentialException("Missing login credentials");
+//            }
         }
     }
     
