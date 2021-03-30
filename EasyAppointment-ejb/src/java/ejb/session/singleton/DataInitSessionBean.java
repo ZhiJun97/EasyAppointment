@@ -2,9 +2,11 @@ package ejb.session.singleton;
 
 import ejb.session.stateless.AdminEntitySessionBeanLocal;
 import ejb.session.stateless.AppointmentEntitySessionBeanLocal;
+import ejb.session.stateless.CustomerEntitySessionBeanLocal;
 import ejb.session.stateless.ServiceProviderEntitySessionBeanLocal;
 import entity.AdminEntity;
 import entity.AppointmentEntity;
+import entity.CustomerEntity;
 import entity.ServiceProviderEntity;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -18,12 +20,15 @@ import util.exception.AdminNotFoundException;
 @Startup
 public class DataInitSessionBean {
 
+    @EJB(name = "CustomerEntitySessionBeanLocal")
+    private CustomerEntitySessionBeanLocal customerEntitySessionBeanLocal;
     @EJB(name = "AdminEntitySessionBeanLocal")
     private AdminEntitySessionBeanLocal adminEntitySessionBeanLocal;
     @EJB(name = "AppointmentEntitySessionBeanLocal")
     private AppointmentEntitySessionBeanLocal appointmentEntitySessionBeanLocal;
     @EJB(name = "ServiceProviderEntitySessionBeanLocal")
     private ServiceProviderEntitySessionBeanLocal serviceProviderEntitySessionBeanLocal;
+    
     
     public DataInitSessionBean()
     {
@@ -51,5 +56,6 @@ public class DataInitSessionBean {
         serviceProviderEntitySessionBeanLocal.createServiceProviderEntity(new ServiceProviderEntity("A1101", "Restaurant", "John's Special", "Airport Road, Avenue 6", "Singapore", "john@easysp.com", "password"));
         
         //require customer entity session bean to initialize customer data
+        customerEntitySessionBeanLocal.createCustomerEntity(new CustomerEntity(new Long(1), "S1234567A", "password", "Bob", "Tan", "M", 23, "12345678", "35 Orchard Road", "Singapore", "bob@easyc.com"));
     }
 }

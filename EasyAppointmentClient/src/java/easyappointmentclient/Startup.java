@@ -23,6 +23,7 @@ public class Startup {
     
     private ServiceProviderEntitySessionBeanRemote serviceProviderEntitySessionBeanRemote;
     private AdminEntitySessionBeanRemote adminEntitySessionBeanRemote;
+    private CustomerEntitySessionBeanRemote customerEntitySessionBeanRemote;
     
     private AdminEntity adminEntity;
     private ServiceProviderEntity serviceProviderEntity;
@@ -128,7 +129,7 @@ public class Startup {
             }
         } if (entity.equals("Customer")) {
             if (email.length() > 0 && password.length() > 0) {
-                customerEntity = CustomerEntitySessionBeanRemote.customerLogin(email, password);
+                customerEntity = customerEntitySessionBeanRemote.customerLogin(email, password);
             } else {
                 throw new InvalidLoginCredentialException("Missing login credentials");
             }
