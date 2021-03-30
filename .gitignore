@@ -1,8 +1,13 @@
 /EasyAppointmentLibrary/dist/
 /EasyAppointmentLibrary/build/
+/EasyAppointmentLibrary/nbproject/
 /dist/
 /build/
+/nbproject/
 /EasyAppointmentClient/dist/
 /EasyAppointmentClient/build/
+/EasyAppointmentClient/nbproject/
 /EasyAppointment-ejb/build/
 /EasyAppointment-ejb/dist/
+/EasyAppointment-ejb/nbproject/
+
