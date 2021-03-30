@@ -21,6 +21,7 @@ import util.exception.InvalidLoginCredentialException;
  */
 public class Startup {
     
+    private CustomerEntitySessionBeanRemote customerEntitySessionBeanRemote;
     private ServiceProviderEntitySessionBeanRemote serviceProviderEntitySessionBeanRemote;
     private AdminEntitySessionBeanRemote adminEntitySessionBeanRemote;
     
@@ -128,7 +129,7 @@ public class Startup {
             }
         } if (entity.equals("Customer")) {
             if (email.length() > 0 && password.length() > 0) {
-                customerEntity = CustomerEntitySessionBeanRemote.customerLogin(email, password);
+                customerEntity = customerEntitySessionBeanRemote.customerLogin(email, password);
             } else {
                 throw new InvalidLoginCredentialException("Missing login credentials");
             }
