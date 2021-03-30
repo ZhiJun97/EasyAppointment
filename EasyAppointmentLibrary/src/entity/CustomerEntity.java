@@ -6,6 +6,7 @@
 package entity;
 
 import java.util.List;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -19,9 +20,10 @@ import javax.persistence.OneToMany;
 @Entity
 public class CustomerEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String indentityNo;
+    @Column(nullable = false)
     private String password;
     private String firstName;
     private String lastName;
@@ -30,6 +32,7 @@ public class CustomerEntity {
     private String phone;
     private String address;
     private String city;
+    @Column(unique = true, nullable = false)
     private String emailAddress;    
     @OneToMany(mappedBy = "customerEntity")
     private List<AppointmentEntity> appointmentEntity;
