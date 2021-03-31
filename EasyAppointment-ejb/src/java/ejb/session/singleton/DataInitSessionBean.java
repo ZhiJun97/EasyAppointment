@@ -50,7 +50,7 @@ public class DataInitSessionBean {
     {  
         adminEntitySessionBeanLocal.createAdminEntity(new AdminEntity("admin@easyadm.com", "password"));
         
-        serviceProviderEntitySessionBeanLocal.createServiceProviderEntity(new ServiceProviderEntity("A1101", "Restaurant", "John's Special", "Airport Road, Avenue 6", "Singapore", "john@easysp.com", "password"));
+        serviceProviderEntitySessionBeanLocal.createServiceProviderEntity(new ServiceProviderEntity("A1101", "Restaurant", "John's Special", "Airport Road, Avenue 6", "Singapore", "john@easysp.com", "91234567", "password"));
         
         //require customer entity session bean to initialize customer data
     }
