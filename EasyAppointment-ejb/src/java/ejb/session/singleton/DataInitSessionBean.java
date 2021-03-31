@@ -2,9 +2,9 @@ package ejb.session.singleton;
 
 import ejb.session.stateless.AdminEntitySessionBeanLocal;
 import ejb.session.stateless.AppointmentEntitySessionBeanLocal;
+import ejb.session.stateless.CustomerEntitySessionBeanLocal;
 import ejb.session.stateless.ServiceProviderEntitySessionBeanLocal;
 import entity.AdminEntity;
-import entity.AppointmentEntity;
 import entity.ServiceProviderEntity;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
