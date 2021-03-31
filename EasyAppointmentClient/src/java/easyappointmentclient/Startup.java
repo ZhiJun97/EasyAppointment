@@ -24,6 +24,9 @@ public class Startup {
     private CustomerEntitySessionBeanRemote customerEntitySessionBeanRemote;
     private ServiceProviderEntitySessionBeanRemote serviceProviderEntitySessionBeanRemote;
     private AdminEntitySessionBeanRemote adminEntitySessionBeanRemote;
+    private ServiceProviderOperationMenu serviceProviderOperationMenu;
+    private AdminOperationMenu adminOperationMenu;
+    private CustomerOperationMenu customerOperationMenu;
     
     private AdminEntity adminEntity;
     private ServiceProviderEntity serviceProviderEntity;
@@ -97,6 +100,8 @@ public class Startup {
                     if (response == 1) {
                         try {
                             login(entity);
+                            adminOperationMenu = new AdminOperationMenu(adminEntity);
+                            adminOperationMenu.adminOperationMainMenu();
                             System.out.println("Login successful!");
                         } catch (InvalidLoginCredentialException ex) {
                             System.out.println("Login error! " + ex.getMessage() + "\n");
@@ -133,6 +138,8 @@ public class Startup {
                     if (response == 2) {
                         try {
                             login(entity);
+                            serviceProviderOperationMenu = new ServiceProviderOperationMenu(serviceProviderEntity);
+                            serviceProviderOperationMenu.serviceProviderMainMenu();
                             System.out.println("Login successful!");
                         } catch (InvalidLoginCredentialException ex) {
                             System.out.println("Login error! " + ex.getMessage() + "\n");
@@ -148,6 +155,45 @@ public class Startup {
                     break;
                 }
             }            
+        } if(entity.equals("Customer")) {
+            while (true) {
+                System.out.println("*** Welcome to " + entity + " terminal ***\n");
+                System.out.println("1: Registration");
+                System.out.println("2: Login");
+                System.out.println("3: Exit\n");
+
+                while (response < 1 || response > 3) {
+                    try {
+                        System.out.print("> ");
+                        response = sc.nextInt();
+                    } catch (InputMismatchException ex) {  
+                        sc.nextLine();
+                    }
+                    
+                    if (response == 1) {
+                        doRegistration(entity);
+                    }
+                    if (response == 2) {
+                        try {
+                            login(entity);
+                            customerOperationMenu = new CustomerOperationMenu(customerEntity);
+                            customerOperationMenu.customerOperationMainMenu();
+                            System.out.println("Login successful!");
+                        } catch (InvalidLoginCredentialException ex) {
+                            System.out.println("Login error! " + ex.getMessage() + "\n");
+                        }
+                    } else if (response == 3) {
+                        System.out.println("Returning to main page...\n");
+                    } else {
+                        System.out.println("Invalid option! Please try again!\n");
+                        break;
+                    }
+                } 
+                if (response == 3) {
+                    break;
+                }
+            }            
+            
         }
     }
     
