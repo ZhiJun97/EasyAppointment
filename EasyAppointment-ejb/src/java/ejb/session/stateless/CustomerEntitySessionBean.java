@@ -42,6 +42,7 @@ public class CustomerEntitySessionBean implements CustomerEntitySessionBeanRemot
         CustomerEntity customerEntity = em.find(CustomerEntity.class, Id);
         
         if(customerEntity != null) {
+            customerEntity.getAppointmentEntity().size();
             return customerEntity;
         }
         else {

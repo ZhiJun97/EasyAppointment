@@ -6,11 +6,16 @@
 package easyappointmentclient;
 
 import ejb.session.stateless.CustomerEntitySessionBeanRemote;
+import ejb.session.stateless.ServiceProviderEntitySessionBeanRemote;
 import entity.AdminEntity;
+import entity.AppointmentEntity;
 import entity.CustomerEntity;
+import entity.ServiceProviderEntity;
 import java.util.InputMismatchException;
+import java.util.List;
 import java.util.Scanner;
 import util.exception.CustomerNotFoundException;
+import util.exception.ServiceProviderNotFoundException;
 
 /**
  *
@@ -20,6 +25,7 @@ public class AdminOperationMenu {
     
     private AdminEntity adminEntity;
     private CustomerEntitySessionBeanRemote customerEntitySessionBeanRemote;
+    private ServiceProviderEntitySessionBeanRemote serviceProviderEntitySessionBeanRemote;
     
     public AdminOperationMenu() {
     }
@@ -56,9 +62,9 @@ public class AdminOperationMenu {
                     sc.nextLine();
                 }
                 if (response == 1) {
-                    
+                    viewCustomerAppointments();
                 } else if (response == 2) {
-                    
+                    viewServiceProviderAppointments();
                 } else if (response == 3) {
                     
                 } else if (response == 4) {
@@ -83,18 +89,30 @@ public class AdminOperationMenu {
         }
     }
     
-    public void viewCustomerAppointment() {
+    public void viewCustomerAppointments() {
         Scanner sc = new Scanner(System.in);
+        CustomerEntity customerEntity = new CustomerEntity();
         System.out.println("*** Admin terminal :: View Appointments for customers ***\n");
-        System.out.println("Enter customer Id> \n");
         while (true) {
+            System.out.println("Enter customer Id> \n");
+            System.out.println("Appointments:\n");
             try {
                 Long customerId = sc.nextLong();
-                CustomerEntity customerEntity = customerEntitySessionBeanRemote.retrieveCustomerById(customerId);
-                customerEntity.getAppointmentEntity().size();
-                break;
+                if (customerId.equals(0)) {
+                    break;
+                }
+                customerEntity = customerEntitySessionBeanRemote.retrieveCustomerById(customerId);
+                List<AppointmentEntity> appointmentArray = customerEntity.getAppointmentEntity();
+                System.out.println("Name        | Business category | Date  | Time | Appointment No.");
+                for (AppointmentEntity appointment : appointmentArray) {
+                    System.out.println(customerEntity.getFirstName() + " " + customerEntity.getLastName() + 
+                    "   | " + appointment.getServiceProviderEntity().getBusinessCategory() + "              | " + 
+                    appointment.getAppointmentDate() + " | " + appointment.getAppointmentTime() + " | " + 
+                    appointment.getAppointmentNo());
+                }
+            System.out.println("Enter 0 to go back to the previous menu\n");
             } catch (CustomerNotFoundException ex) {
-                System.out.println(ex.getCause());
+                System.out.println(ex.getMessage());
             } catch (InputMismatchException ex) {
                 System.out.println("Invalid input! Please enter a numeric value!");
             }
@@ -102,4 +120,35 @@ public class AdminOperationMenu {
         }
     }
     
+    public void viewServiceProviderAppointments() {
+        Scanner sc = new Scanner(System.in);
+        ServiceProviderEntity serviceProviderEntity = new ServiceProviderEntity();
+        System.out.println("*** Admin terminal :: View Appointments for service providers ***");
+        while (true) {
+            System.out.println("Enter customer Id> \n");
+            System.out.println("Appointments: \n");
+            try {
+                Long serviceProviderId = sc.nextLong();
+                if (serviceProviderId.equals(0)) {
+                    break;
+                }
+                serviceProviderEntity = serviceProviderEntitySessionBeanRemote.retrieveServiceProviderByUniqueIdNumber(serviceProviderId);
+                List<AppointmentEntity> appointmentArray = serviceProviderEntity.getAppointmentEntity();
+                System.out.println("Name        | Business category | Date | Time | Appointment No.");
+                for (AppointmentEntity appointment : appointmentArray) {
+                    System.out.println(serviceProviderEntity.getName() + " | " + 
+                    serviceProviderEntity.getBusinessCategory() + " | " + 
+                    appointment.getAppointmentDate() + 
+                    appointment.getAppointmentTime() + 
+                    appointment.getAppointmentId());
+                }
+                System.out.println("Enter 0 to go back to the previous menu\n");
+            } catch (ServiceProviderNotFoundException ex) {
+                System.out.println(ex.getMessage());
+            } catch (InputMismatchException ex) {
+                System.out.println("Invalid input! Please enter a numeric value!");
+            }
+            sc.nextLine();
+        }
+    }
 }
