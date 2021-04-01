@@ -40,6 +40,7 @@ public class ServiceProviderEntitySessionBean implements ServiceProviderEntitySe
         
         if(serviceProviderEntity != null)
         {
+            serviceProviderEntity.getAppointmentEntity().size();
             return serviceProviderEntity;
         }
         else
