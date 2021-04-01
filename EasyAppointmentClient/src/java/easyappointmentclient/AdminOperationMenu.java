@@ -5,9 +5,12 @@
  */
 package easyappointmentclient;
 
+import ejb.session.stateless.CustomerEntitySessionBeanRemote;
 import entity.AdminEntity;
+import entity.CustomerEntity;
 import java.util.InputMismatchException;
 import java.util.Scanner;
+import util.exception.CustomerNotFoundException;
 
 /**
  *
@@ -16,12 +19,14 @@ import java.util.Scanner;
 public class AdminOperationMenu {
     
     private AdminEntity adminEntity;
-
+    private CustomerEntitySessionBeanRemote customerEntitySessionBeanRemote;
+    
     public AdminOperationMenu() {
     }
 
-    public AdminOperationMenu(AdminEntity adminEntity) {
+    public AdminOperationMenu(AdminEntity adminEntity, CustomerEntitySessionBeanRemote customerEntitySessionBean) {
         this.adminEntity = adminEntity;
+        this.customerEntitySessionBeanRemote = customerEntitySessionBean;
     }
     
     public void adminOperationMainMenu() {
@@ -75,6 +80,25 @@ public class AdminOperationMenu {
             if (response == 9) {
                 break;
             }
+        }
+    }
+    
+    public void viewCustomerAppointment() {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("*** Admin terminal :: View Appointments for customers ***\n");
+        System.out.println("Enter customer Id> \n");
+        while (true) {
+            try {
+                Long customerId = sc.nextLong();
+                CustomerEntity customerEntity = customerEntitySessionBeanRemote.retrieveCustomerById(customerId);
+                customerEntity.getAppointmentEntity().size();
+                break;
+            } catch (CustomerNotFoundException ex) {
+                System.out.println(ex.getCause());
+            } catch (InputMismatchException ex) {
+                System.out.println("Invalid input! Please enter a numeric value!");
+            }
+            sc.nextLine();
         }
     }
     

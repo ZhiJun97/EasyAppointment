@@ -5,6 +5,7 @@
  */
 package entity;
 
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -38,6 +39,7 @@ public class CustomerEntity {
     private List<AppointmentEntity> appointmentEntity;
 
     public CustomerEntity() {
+        this.appointmentEntity = new ArrayList<AppointmentEntity>();
     }
 
     public CustomerEntity(String indentityNo, String password, String firstName, String lastName, String gender, Integer age, String phone, String address, String city, String emailAddress) {
@@ -162,6 +164,14 @@ public class CustomerEntity {
         int hash = 0;
         hash += (id != null ? id.hashCode() : 0);
         return hash;
+    }
+
+    public List<AppointmentEntity> getAppointmentEntity() {
+        return appointmentEntity;
+    }
+
+    public void setAppointmentEntity(List<AppointmentEntity> appointmentEntity) {
+        this.appointmentEntity = appointmentEntity;
     }
 
     @Override

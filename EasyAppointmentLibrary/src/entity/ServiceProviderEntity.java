@@ -1,6 +1,7 @@
 package entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -39,7 +40,9 @@ public class ServiceProviderEntity implements Serializable {
     @OneToMany(mappedBy = "serviceProviderEntity")
     private List<AppointmentEntity> appointmentEntity;
 
-    public ServiceProviderEntity() {}
+    public ServiceProviderEntity() {
+        this.appointmentEntity = new ArrayList<AppointmentEntity>();
+    }
     
     public ServiceProviderEntity(String businessRegNumber, String businessCategory, String name, String address, String city, String email, String phone, String password) {
         this.businessRegNumber = businessRegNumber;

@@ -77,9 +77,23 @@ public class AppointmentEntity implements Serializable {
     public void setAppointmentTime(Date appointmentTime) {
         this.appointmentTime = appointmentTime;
     }
-    
-    
 
+    public CustomerEntity getCustomerEntity() {
+        return customerEntity;
+    }
+
+    public void setCustomerEntity(CustomerEntity customerEntity) {
+        this.customerEntity = customerEntity;
+    }
+
+    public ServiceProviderEntity getServiceProviderEntity() {
+        return serviceProviderEntity;
+    }
+
+    public void setServiceProviderEntity(ServiceProviderEntity serviceProviderEntity) {
+        this.serviceProviderEntity = serviceProviderEntity;
+    }
+    
     @Override
     public int hashCode() {
         int hash = 0;
