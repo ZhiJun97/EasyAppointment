@@ -1,6 +1,7 @@
 package ejb.session.stateless;
 
 import entity.ServiceProviderEntity;
+import java.util.List;
 import javax.ejb.Local;
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
@@ -40,6 +41,7 @@ public class ServiceProviderEntitySessionBean implements ServiceProviderEntitySe
         
         if(serviceProviderEntity != null)
         {
+            serviceProviderEntity.getAppointmentEntity().size();
             return serviceProviderEntity;
         }
         else
@@ -62,6 +64,13 @@ public class ServiceProviderEntitySessionBean implements ServiceProviderEntitySe
         {
             throw new ServiceProviderNotFoundException("Service Provider Email " + emailAddress + " does not exist!");
         }
+    }
+    
+    @Override
+    public List<ServiceProviderEntity> retrieveAllServiceProvider() {
+        Query query = em.createQuery("SELECT s FROM ServiceProviderEntity s");
+        
+        return query.getResultList();
     }
     
     @Override

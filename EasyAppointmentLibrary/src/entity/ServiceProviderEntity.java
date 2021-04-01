@@ -1,6 +1,7 @@
 package entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -29,8 +30,9 @@ public class ServiceProviderEntity implements Serializable {
     private String name;
     private String address;
     private String city;
+    private String phone;
     @Column(unique = true, nullable = false)
-    private String emailAddress; //username
+    private String email; //username
     @Column(nullable = false)
     private String password;
     @Enumerated(EnumType.STRING)
@@ -38,15 +40,18 @@ public class ServiceProviderEntity implements Serializable {
     @OneToMany(mappedBy = "serviceProviderEntity")
     private List<AppointmentEntity> appointmentEntity;
 
-    public ServiceProviderEntity() {}
+    public ServiceProviderEntity() {
+        this.appointmentEntity = new ArrayList<AppointmentEntity>();
+    }
     
-    public ServiceProviderEntity(String businessRegNumber, String businessCategory, String name, String address, String city, String emailAddress, String password) {
+    public ServiceProviderEntity(String businessRegNumber, String businessCategory, String name, String address, String city, String email, String phone, String password) {
         this.businessRegNumber = businessRegNumber;
         this.businessCategory = businessCategory;
         this.name = name;
         this.address = address;
         this.city = city;
-        this.emailAddress = emailAddress;
+        this.email = email;
+        this.phone = phone;
         this.password = password;
     }
 
@@ -56,7 +61,7 @@ public class ServiceProviderEntity implements Serializable {
         this.name = name;
         this.address = address;
         this.city = city;
-        this.emailAddress = emailAddress;
+        this.email = emailAddress;
         this.password = password;
         this.statusEnum = statusEnum;
         this.appointmentEntity = appointmentEntity;
@@ -143,12 +148,12 @@ public class ServiceProviderEntity implements Serializable {
         this.city = city;
     }
 
-    public String getEmailAddress() {
-        return emailAddress;
+    public String getEmail() {
+        return email;
     }
 
-    public void setEmailAddress(String emailAddress) {
-        this.emailAddress = emailAddress;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getPassword() {
@@ -167,5 +172,19 @@ public class ServiceProviderEntity implements Serializable {
         this.statusEnum = statusEnum;
     }
     
-    
+        public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public List<AppointmentEntity> getAppointmentEntity() {
+        return appointmentEntity;
+    }
+
+    public void setAppointmentEntity(List<AppointmentEntity> appointmentEntity) {
+        this.appointmentEntity = appointmentEntity;
+    }
 }

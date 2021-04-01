@@ -23,21 +23,21 @@
 nbproject/private/
 build/
 dist/
-EnterpriseApplication1-ejb/nbproject/private/
-EnterpriseApplication1-ejb/build/
-EnterpriseApplication1-ejb/dist/
+EasyAppointment-ejb/nbproject/private/
+EasyAppointment-ejb/build/
+EasyAppointment-ejb/dist/
 
-EnterpriseApplication1-war/nbproject/private/
-EnterpriseApplication1-war/build/
-EnterpriseApplication1-war/dist/
+EasyAppointment-war/nbproject/private/
+EasyAppointment-war/build/
+EasyAppointment-war/dist/
 
-EnterpriseApplication1Client/nbproject/private/
-EnterpriseApplication1Client/build/
-EnterpriseApplication1Client/dist/
+EasyAppointmentClient/nbproject/private/
+EasyAppointmentClient/build/
+EasyAppointmentClient/dist/
 
-EnterpriseApplication1Library/nbproject/private/
-EnterpriseApplication1Library/build/
-EnterpriseApplication1Library/dist/
+EasyAppointmentLibrary/nbproject/private/
+EasyAppointmentLibrary/build/
+EasyAppointmentLibrary/dist/
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*

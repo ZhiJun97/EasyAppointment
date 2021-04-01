@@ -5,7 +5,9 @@
  */
 package entity;
 
+import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -19,9 +21,10 @@ import javax.persistence.OneToMany;
 @Entity
 public class CustomerEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String indentityNo;
+    @Column(nullable = false)
     private String password;
     private String firstName;
     private String lastName;
@@ -30,17 +33,18 @@ public class CustomerEntity {
     private String phone;
     private String address;
     private String city;
+    @Column(unique = true, nullable = false)
     private String emailAddress;    
     @OneToMany(mappedBy = "customerEntity")
     private List<AppointmentEntity> appointmentEntity;
 
     public CustomerEntity() {
+        this.appointmentEntity = new ArrayList<AppointmentEntity>();
     }
 
-    public CustomerEntity(Long id, String indentityNo, String password, String firstName, String lastName, String gender, Integer age, String phone, String address, String city, String emailAddress) {
+    public CustomerEntity(String indentityNo, String password, String firstName, String lastName, String gender, Integer age, String phone, String address, String city, String emailAddress) {
         this();
         
-        this.id = id;
         this.indentityNo = indentityNo;
         this.password = password;
         this.firstName = firstName;
@@ -160,6 +164,14 @@ public class CustomerEntity {
         int hash = 0;
         hash += (id != null ? id.hashCode() : 0);
         return hash;
+    }
+
+    public List<AppointmentEntity> getAppointmentEntity() {
+        return appointmentEntity;
+    }
+
+    public void setAppointmentEntity(List<AppointmentEntity> appointmentEntity) {
+        this.appointmentEntity = appointmentEntity;
     }
 
     @Override

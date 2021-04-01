@@ -1,6 +1,7 @@
 package ejb.session.stateless;
 
 import entity.ServiceProviderEntity;
+import java.util.List;
 import util.exception.InvalidLoginCredentialException;
 import util.exception.ServiceProviderNotFoundException;
 
@@ -21,4 +22,6 @@ public interface ServiceProviderEntitySessionBeanRemote{
     public void updateServiceProviderEntity(ServiceProviderEntity serviceProviderEntity);
     
     public void deleteServiceProviderEntity(Long uniqueIdNumber) throws ServiceProviderNotFoundException;
+    
+    public List<ServiceProviderEntity> retrieveAllServiceProvider();
 }
