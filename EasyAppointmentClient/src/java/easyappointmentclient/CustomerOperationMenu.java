@@ -99,40 +99,42 @@ public class CustomerOperationMenu {
         if (dateProcessed.getDay() == 0) {
         
         } else {
-        // get list of appointments of all service providers
-            ArrayList<List<AppointmentEntity>> appointments = new ArrayList<>();
+            // get list of appointments of all service providers
             List<ServiceProviderEntity> serviceProviders = serviceProviderEntitySessionBeanRemote.retrieveAllServiceProvider();
+            // check if service provider is full on that day, if full, remove from list
             for (ServiceProviderEntity s : serviceProviders) {
-                appointments.add(s.getAppointmentEntity());
-            }
-            // search through list of appointments, discard appointments that match user input
-            for (List<AppointmentEntity> l : appointments) {
-                for (AppointmentEntity a : l) {
-                    if (dateProcessed.equals(a.getAppointmentDate())) {
-                        appointments.remove(l);
+                // get list of appointments for each service provider
+                List<AppointmentEntity> appointments = s.getAppointmentEntity();
+                // filter appointments for date entered by user
+                for (AppointmentEntity a : appointments) {
+                    if (!a.getAppointmentDate().equals(dateProcessed)) {
+                        appointments.remove(a);
                     }
                 }
+                // check if service provider is full on date entered by user
+                if (appointments.size() == 10) {
+                    serviceProviders.remove(s);
+                }
             }
-            // return each unique service provider available on that day
-            ArrayList<ServiceProviderEntity> availableServiceProviders = new ArrayList<>();
-            for (List<AppointmentEntity> l : appointments) {
-                availableServiceProviders.add(l.get(0).getServiceProviderEntity());
+            System.out.println("Service provider Id | Name | First Available Time | Address | Overall rating");
+            for (ServiceProviderEntity s : serviceProviders) {
+                List<AppointmentEntity> appointments = s.getAppointmentEntity();
+                // get first available slot
+                Integer earliestSlot = 0;
+                dateProcessed.setMinutes(30);
+                for (int i = 8; i <= 18; i++) {
+                    dateProcessed.setHours(i);
+                    for (AppointmentEntity a : appointments) {  
+                        if (a.getAppointmentTime().equals(dateProcessed)) {
+                            break;
+                        } else {
+                            earliestSlot = dateProcessed.getHours();
+                        }
+                    }
+                }
+                // incomplete
+                System.out.print(s.getUniqueIdNumber() + " | " + s.getName() + " | " + earliestSlot.toString() + ":" + "30 | " + s.getAddress() + " | " + s.getRating());
             }
-            ArrayList<ServiceProviderEntity> availableServiceProvidersWithoutDuplicates = removeDuplicates(availableServiceProviders);
-            
-            // format the list
         }
-    }
-    
-    public <T> ArrayList<T> removeDuplicates(ArrayList<T> list) {
-        ArrayList<T> newList = new ArrayList<>();
-        
-        for (T element : list) {
-            if (!newList.contains(element)) {
-                newList.add(element);
-            }
-        }
-        
-        return newList;
     }
 }
