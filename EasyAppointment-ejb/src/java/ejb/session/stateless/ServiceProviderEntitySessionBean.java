@@ -51,10 +51,10 @@ public class ServiceProviderEntitySessionBean implements ServiceProviderEntitySe
     }
     
     @Override
-    public ServiceProviderEntity retrieveServiceProviderByEmail(String emailAddress) throws ServiceProviderNotFoundException
+    public ServiceProviderEntity retrieveServiceProviderByEmail(String email) throws ServiceProviderNotFoundException
     {
-        Query query = em.createQuery("SELECT s FROM ServiceProviderEntity s WHERE s.emailAddress = :inEmailAddress");
-        query.setParameter("inEmailAddress", emailAddress);
+        Query query = em.createQuery("SELECT s FROM ServiceProviderEntity s WHERE s.email = :inEmail");
+        query.setParameter("inEmail", email);
         
         try
         {
@@ -62,7 +62,7 @@ public class ServiceProviderEntitySessionBean implements ServiceProviderEntitySe
         }
         catch(NoResultException | NonUniqueResultException ex)
         {
-            throw new ServiceProviderNotFoundException("Service Provider Email " + emailAddress + " does not exist!");
+            throw new ServiceProviderNotFoundException("Service Provider Email " + email + " does not exist!");
         }
     }
     

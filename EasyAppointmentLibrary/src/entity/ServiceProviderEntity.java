@@ -55,13 +55,13 @@ public class ServiceProviderEntity implements Serializable {
         this.password = password;
     }
 
-    public ServiceProviderEntity(String businessRegNumber, String businessCategory, String name, String address, String city, String emailAddress, String password, StatusEnum statusEnum, List<AppointmentEntity> appointmentEntity) {
+    public ServiceProviderEntity(String businessRegNumber, String businessCategory, String name, String address, String city, String email, String password, StatusEnum statusEnum, List<AppointmentEntity> appointmentEntity) {
         this.businessRegNumber = businessRegNumber;
         this.businessCategory = businessCategory;
         this.name = name;
         this.address = address;
         this.city = city;
-        this.email = emailAddress;
+        this.email = email;
         this.password = password;
         this.statusEnum = statusEnum;
         this.appointmentEntity = appointmentEntity;
