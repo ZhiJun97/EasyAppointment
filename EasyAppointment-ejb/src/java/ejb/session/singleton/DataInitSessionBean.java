@@ -53,7 +53,7 @@ public class DataInitSessionBean {
         adminEntitySessionBeanLocal.createAdminEntity(new AdminEntity("admin@easyadm.com", "password"));
         
         serviceProviderEntitySessionBeanLocal.createServiceProviderEntity(new ServiceProviderEntity("A1101", "Restaurant", "John's Special", "Airport Road, Avenue 6", "Singapore", "john@easysp.com", "91234567", "password"));
-        
+
         customerEntitySessionBeanLocal.createCustomerEntity(new CustomerEntity("S1234567F", "password", "Adam", "Tan", "Male", 23, "82345678", "Yishun Ring Road", "Singapore", "adam@easycust.com"));
     }
 }

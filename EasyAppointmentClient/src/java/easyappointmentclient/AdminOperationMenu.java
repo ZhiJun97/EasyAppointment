@@ -30,9 +30,10 @@ public class AdminOperationMenu {
     public AdminOperationMenu() {
     }
 
-    public AdminOperationMenu(AdminEntity adminEntity, CustomerEntitySessionBeanRemote customerEntitySessionBean) {
+    public AdminOperationMenu(AdminEntity adminEntity, CustomerEntitySessionBeanRemote customerEntitySessionBeanRemote, ServiceProviderEntitySessionBeanRemote serviceProviderEntitySessionBeanRemote) {
         this.adminEntity = adminEntity;
-        this.customerEntitySessionBeanRemote = customerEntitySessionBean;
+        this.customerEntitySessionBeanRemote = customerEntitySessionBeanRemote;
+        this.serviceProviderEntitySessionBeanRemote = serviceProviderEntitySessionBeanRemote;
     }
     
     public void adminOperationMainMenu() {
@@ -66,7 +67,7 @@ public class AdminOperationMenu {
                 } else if (response == 2) {
                     viewServiceProviderAppointments();
                 } else if (response == 3) {
-                    
+                    viewServiceProvider();
                 } else if (response == 4) {
                     
                 } else if (response == 5) {
@@ -93,17 +94,22 @@ public class AdminOperationMenu {
         Scanner sc = new Scanner(System.in);
         CustomerEntity customerEntity = new CustomerEntity();
         System.out.println("*** Admin terminal :: View Appointments for customers ***\n");
+        
         while (true) {
             System.out.println("Enter customer Id> \n");
             System.out.println("Appointments:\n");
+            
             try {
                 Long customerId = sc.nextLong();
+                //exit if input 0
                 if (customerId.equals(0)) {
                     break;
                 }
                 customerEntity = customerEntitySessionBeanRemote.retrieveCustomerById(customerId);
                 List<AppointmentEntity> appointmentArray = customerEntity.getAppointmentEntity();
                 System.out.println("Name        | Business category | Date  | Time | Appointment No.");
+                
+                //iterating through customer's appointments
                 for (AppointmentEntity appointment : appointmentArray) {
                     System.out.println(customerEntity.getFirstName() + " " + customerEntity.getLastName() + 
                     "   | " + appointment.getServiceProviderEntity().getBusinessCategory() + "              | " + 
@@ -124,17 +130,21 @@ public class AdminOperationMenu {
         Scanner sc = new Scanner(System.in);
         ServiceProviderEntity serviceProviderEntity = new ServiceProviderEntity();
         System.out.println("*** Admin terminal :: View Appointments for service providers ***");
+        
         while (true) {
             System.out.println("Enter customer Id> \n");
             System.out.println("Appointments: \n");
+            
             try {
                 Long serviceProviderId = sc.nextLong();
+                //exit if 0
                 if (serviceProviderId.equals(0)) {
                     break;
                 }
                 serviceProviderEntity = serviceProviderEntitySessionBeanRemote.retrieveServiceProviderByUniqueIdNumber(serviceProviderId);
                 List<AppointmentEntity> appointmentArray = serviceProviderEntity.getAppointmentEntity();
                 System.out.println("Name        | Business category | Date | Time | Appointment No.");
+                //iterate through service provider appointments
                 for (AppointmentEntity appointment : appointmentArray) {
                     System.out.println(serviceProviderEntity.getName() + " | " + 
                     serviceProviderEntity.getBusinessCategory() + " | " + 
@@ -149,6 +159,13 @@ public class AdminOperationMenu {
                 System.out.println("Invalid input! Please enter a numeric value!");
             }
             sc.nextLine();
+        }
+    }
+    
+    public void viewServiceProvider() {
+        List<ServiceProviderEntity> serviceProviderList = serviceProviderEntitySessionBeanRemote.retrieveAllServiceProvider();
+        for (ServiceProviderEntity serviceProvider : serviceProviderList) {
+            System.out.println(serviceProvider.getName());
         }
     }
 }
