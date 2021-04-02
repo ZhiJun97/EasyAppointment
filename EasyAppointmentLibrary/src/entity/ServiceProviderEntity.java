@@ -31,6 +31,8 @@ public class ServiceProviderEntity implements Serializable {
     private String address;
     private String city;
     private String phone;
+    private double ratingAverage;
+    private int ratingCount;
     @Column(unique = true, nullable = false)
     private String email; //username
     @Column(nullable = false)
@@ -192,5 +194,21 @@ public class ServiceProviderEntity implements Serializable {
 
     public void setAppointmentEntity(List<AppointmentEntity> appointmentEntity) {
         this.appointmentEntity = appointmentEntity;
+    }
+    
+        public double getRatingAverage() {
+        return ratingAverage;
+    }
+
+    public void setRatingAverage(double ratingAverage) {
+        this.ratingAverage = ratingAverage;
+    }
+
+    public int getRatingCount() {
+        return ratingCount;
+    }
+
+    public void setRatingCount(int ratingCount) {
+        this.ratingCount = ratingCount;
     }
 }
