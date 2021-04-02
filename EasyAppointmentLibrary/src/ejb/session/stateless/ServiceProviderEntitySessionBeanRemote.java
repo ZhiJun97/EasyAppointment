@@ -24,4 +24,6 @@ public interface ServiceProviderEntitySessionBeanRemote{
     public void deleteServiceProviderEntity(Long uniqueIdNumber) throws ServiceProviderNotFoundException;
     
     public List<ServiceProviderEntity> retrieveAllServiceProvider();
+    
+    public ServiceProviderEntity newestAppointmentList(ServiceProviderEntity serviceProviderEntity);
 }

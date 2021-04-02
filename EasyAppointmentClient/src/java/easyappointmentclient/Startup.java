@@ -6,9 +6,11 @@
 package easyappointmentclient;
 
 import ejb.session.stateless.AdminEntitySessionBeanRemote;
+import ejb.session.stateless.AppointmentEntitySessionBeanRemote;
 import ejb.session.stateless.ServiceProviderEntitySessionBeanRemote;
 import ejb.session.stateless.CustomerEntitySessionBeanRemote;
 import entity.AdminEntity;
+import entity.AppointmentEntity;
 import entity.CustomerEntity;
 import entity.ServiceProviderEntity;
 import java.util.InputMismatchException;
@@ -24,6 +26,8 @@ public class Startup {
     private CustomerEntitySessionBeanRemote customerEntitySessionBeanRemote;
     private ServiceProviderEntitySessionBeanRemote serviceProviderEntitySessionBeanRemote;
     private AdminEntitySessionBeanRemote adminEntitySessionBeanRemote;
+    private AppointmentEntitySessionBeanRemote appointmentEntitySessionBeanRemote;
+    
     private ServiceProviderOperationMenu serviceProviderOperationMenu;
     private AdminOperationMenu adminOperationMenu;
     private CustomerOperationMenu customerOperationMenu;
@@ -31,14 +35,16 @@ public class Startup {
     private AdminEntity adminEntity;
     private ServiceProviderEntity serviceProviderEntity;
     private CustomerEntity customerEntity;
+    private AppointmentEntity appointmentEntity;
 
     public Startup() {
     }
     
-    public Startup(CustomerEntitySessionBeanRemote customerEntitySessionBeanRemote, ServiceProviderEntitySessionBeanRemote serviceProviderEntitySessionBeanRemote, AdminEntitySessionBeanRemote adminEntitySessionBeanRemote) {
+    public Startup(CustomerEntitySessionBeanRemote customerEntitySessionBeanRemote, ServiceProviderEntitySessionBeanRemote serviceProviderEntitySessionBeanRemote, AdminEntitySessionBeanRemote adminEntitySessionBeanRemote, AppointmentEntitySessionBeanRemote appointmentEntitySessionBeanRemote) {
         this.customerEntitySessionBeanRemote = customerEntitySessionBeanRemote;
         this.serviceProviderEntitySessionBeanRemote = serviceProviderEntitySessionBeanRemote;
         this.adminEntitySessionBeanRemote = adminEntitySessionBeanRemote;
+        this.appointmentEntitySessionBeanRemote = appointmentEntitySessionBeanRemote;
     }
     
     public void start() {
@@ -123,7 +129,8 @@ public class Startup {
                 System.out.println("1: Registration");
                 System.out.println("2: Login");
                 System.out.println("3: Exit\n");
-
+                response = 0;
+                
                 while (response < 1 || response > 3) {
                     try {
                         System.out.print("> ");
@@ -138,9 +145,9 @@ public class Startup {
                     if (response == 2) {
                         try {
                             login(entity);
-                            serviceProviderOperationMenu = new ServiceProviderOperationMenu(serviceProviderEntity);
-                            serviceProviderOperationMenu.serviceProviderMainMenu();
                             System.out.println("Login successful!");
+                            serviceProviderOperationMenu = new ServiceProviderOperationMenu(serviceProviderEntity, serviceProviderEntitySessionBeanRemote, appointmentEntitySessionBeanRemote);
+                            serviceProviderOperationMenu.serviceProviderMainMenu();
                         } catch (InvalidLoginCredentialException ex) {
                             System.out.println("Login error! " + ex.getMessage() + "\n");
                         }

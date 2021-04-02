@@ -11,3 +11,9 @@
 /EasyAppointment-ejb/dist/
 /EasyAppointment-ejb/nbproject/
 
+/WebServiceClient/nbproject/private/
+/EAWebServiceClient/nbproject/private/
+/EAWebServiceClient/build/
+/EasyAppointmentWSClient/nbproject/private/
+/EasyAppointmentWSClient/build/
+/EasyAppointmentWSClient/dist/

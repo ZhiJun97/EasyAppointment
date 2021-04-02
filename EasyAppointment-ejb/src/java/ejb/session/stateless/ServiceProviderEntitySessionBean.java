@@ -80,7 +80,7 @@ public class ServiceProviderEntitySessionBean implements ServiceProviderEntitySe
         {
             ServiceProviderEntity serviceProviderEntity = retrieveServiceProviderByEmail(emailAddress);
             if(serviceProviderEntity.getPassword().equals(password))
-            {              
+            {           
                 return serviceProviderEntity;
             }
             else
@@ -108,5 +108,15 @@ public class ServiceProviderEntitySessionBean implements ServiceProviderEntitySe
         } catch (ServiceProviderNotFoundException ex) {
             System.out.println("Unique ID Number " + uniqueIdNumber + " does not exist!" + ex.getMessage());
         }
+    }
+    
+    @Override 
+    public ServiceProviderEntity newestAppointmentList(ServiceProviderEntity serviceProviderEntity) {
+        //Query query = em.createQuery("SELECT a FROM AppointmentEntity a WHERE a.email = :inEmail");
+        //query.setParameter("inEmail", email);
+        //Query apptlist = em.createQuery("SELECT a FROM AppointmentEntity a WHERE a.serviceProviderEntity.email = 'john@easysp.com'");
+        //serviceProviderEntity.setAppointmentEntity(apptlist.getResultList());
+        //updateServiceProviderEntity(serviceProviderEntity);
+        return serviceProviderEntity;
     }
 }
