@@ -133,7 +133,7 @@ public class CustomerOperationMenu {
                     }
                 }
                 // incomplete
-                System.out.print(s.getUniqueIdNumber() + " | " + s.getName() + " | " + earliestSlot.toString() + ":" + "30 | " + s.getAddress() + " | " + s.getRating());
+                //System.out.print(s.getUniqueIdNumber() + " | " + s.getName() + " | " + earliestSlot.toString() + ":" + "30 | " + s.getAddress() + " | " + s.getRating());
             }
         }
     }

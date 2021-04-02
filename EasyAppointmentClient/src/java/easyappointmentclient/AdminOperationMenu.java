@@ -69,7 +69,7 @@ public class AdminOperationMenu {
                 } else if (response == 3) {
                     viewServiceProvider();
                 } else if (response == 4) {
-                    
+                    approveServiceProvider();
                 } else if (response == 5) {
                     
                 } else if (response == 6) {
@@ -211,5 +211,9 @@ public class AdminOperationMenu {
             i ++;
         }
         System.out.print("\n");
+    }
+    
+    public void approveServiceProvider() {
+        
     }
 }
