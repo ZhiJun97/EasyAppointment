@@ -138,7 +138,7 @@ public class Startup {
                     if (response == 2) {
                         try {
                             login(entity);
-                            serviceProviderOperationMenu = new ServiceProviderOperationMenu(serviceProviderEntity);
+                            serviceProviderOperationMenu = new ServiceProviderOperationMenu(serviceProviderEntity, serviceProviderEntitySessionBeanRemote);
                             serviceProviderOperationMenu.serviceProviderMainMenu();
                             System.out.println("Login successful!");
                         } catch (InvalidLoginCredentialException ex) {
