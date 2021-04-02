@@ -97,7 +97,13 @@ public class ServiceProviderEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "entity.ServiceProviderEntity[ id=" + uniqueIdNumber + " ]";
+        return String.format("%-2s", this.getServiceProviderId()) + " | " +
+               String.format("%-4s", this.getName()) + " | " + 
+               String.format("%-17s", this.getBusinessCategory()) + " | " + 
+               String.format("%-4s", this.getCity()) + " | " + 
+               String.format("%-7s", this.getAddress()) + " | " + 
+               String.format("%-5s", this.getEmail()) + " | " +
+               String.format("%-5s", this.getPhone());
     }
 
     public Long getUniqueIdNumber() {
