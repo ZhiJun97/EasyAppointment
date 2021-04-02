@@ -162,10 +162,54 @@ public class AdminOperationMenu {
         }
     }
     
+    //helper method to pad strings
+    public static String padRight(String s, int n) {
+        return String.format("%-" + n + "s", s);
+    }
+    
     public void viewServiceProvider() {
         List<ServiceProviderEntity> serviceProviderList = serviceProviderEntitySessionBeanRemote.retrieveAllServiceProvider();
+        //formatting output
+        String nameHeader = "Name";
+        String businessCategoryHeader = "Business Category";
+        String cityHeader = "City";
+        String addressHeader = "Address";
+        String emailHeader = "Email";
+        String phoneHeader = "Phone";
         for (ServiceProviderEntity serviceProvider : serviceProviderList) {
-            System.out.println(serviceProvider.getName());
+            if (serviceProvider.getName().length() > nameHeader.length()) {
+                int i = serviceProvider.getName().length();
+                nameHeader = padRight(nameHeader, i);
+            }
+            if (serviceProvider.getBusinessCategory().length() > businessCategoryHeader.length()) {
+                int i = serviceProvider.getBusinessCategory().length();
+                businessCategoryHeader = padRight(businessCategoryHeader, i);
+            }
+            if (serviceProvider.getCity().length() > cityHeader.length()) {
+                int i = serviceProvider.getCity().length();
+                cityHeader = padRight(cityHeader, i);
+            }
+            if (serviceProvider.getAddress().length() > addressHeader.length()) {
+                int i = serviceProvider.getAddress().length();
+                addressHeader = padRight(addressHeader, i);
+            }
+            if (serviceProvider.getEmail().length() > emailHeader.length()) {
+                int i = serviceProvider.getEmail().length();
+                emailHeader = padRight(emailHeader, i);
+            }
+            if (serviceProvider.getPhone().length() > phoneHeader.length()) {
+                int i = serviceProvider.getPhone().length();
+                phoneHeader = padRight(phoneHeader, i);
+            }
         }
+        System.out.println("Id| " + nameHeader + " | " + businessCategoryHeader + " | " + cityHeader + " | " + addressHeader + " | " + emailHeader + " | " + phoneHeader);
+        
+        //have to fix for only approved status
+        for (ServiceProviderEntity serviceProvider : serviceProviderList) {
+            int i = 1;
+            System.out.println(serviceProvider);
+            i ++;
+        }
+        System.out.print("\n");
     }
 }
