@@ -14,9 +14,13 @@ import entity.ServiceProviderEntity;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
-import util.enumeration.StatusEnum;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import util.exception.CustomerNotFoundException;
 import util.exception.ServiceProviderNotFoundException;
+import util.exception.ServiceProviderApproveException;
+import util.exception.ServiceProviderBlockedException;
+import static util.helper.StringUtil.*;
 
 /**
  *
@@ -70,9 +74,9 @@ public class AdminOperationMenu {
                 } else if (response == 3) {
                     viewServiceProvider();
                 } else if (response == 4) {
-                    approveServiceProvider();
+                    approveServiceProviders();
                 } else if (response == 5) {
-                    
+                    blockServiceProviders();
                 } else if (response == 6) {
                     
                 } else if (response == 7) {
@@ -163,47 +167,9 @@ public class AdminOperationMenu {
         }
     }
     
-    //helper method to pad strings
-    public static String padRight(String s, int n) {
-        return String.format("%-" + n + "s", s);
-    }
-    
     public void viewServiceProvider() {
         List<ServiceProviderEntity> serviceProviderList = serviceProviderEntitySessionBeanRemote.retrieveAllServiceProvider();
-        //formatting output
-        String nameHeader = "Name";
-        String businessCategoryHeader = "Business Category";
-        String cityHeader = "City";
-        String addressHeader = "Address";
-        String emailHeader = "Email";
-        String phoneHeader = "Phone";
-        for (ServiceProviderEntity serviceProvider : serviceProviderList) {
-            if (serviceProvider.getName().length() > nameHeader.length()) {
-                int i = serviceProvider.getName().length();
-                nameHeader = padRight(nameHeader, i);
-            }
-            if (serviceProvider.getBusinessCategory().length() > businessCategoryHeader.length()) {
-                int i = serviceProvider.getBusinessCategory().length();
-                businessCategoryHeader = padRight(businessCategoryHeader, i);
-            }
-            if (serviceProvider.getCity().length() > cityHeader.length()) {
-                int i = serviceProvider.getCity().length();
-                cityHeader = padRight(cityHeader, i);
-            }
-            if (serviceProvider.getAddress().length() > addressHeader.length()) {
-                int i = serviceProvider.getAddress().length();
-                addressHeader = padRight(addressHeader, i);
-            }
-            if (serviceProvider.getEmail().length() > emailHeader.length()) {
-                int i = serviceProvider.getEmail().length();
-                emailHeader = padRight(emailHeader, i);
-            }
-            if (serviceProvider.getPhone().length() > phoneHeader.length()) {
-                int i = serviceProvider.getPhone().length();
-                phoneHeader = padRight(phoneHeader, i);
-            }
-        }
-        System.out.println("Id| " + nameHeader + " | " + businessCategoryHeader + " | " + cityHeader + " | " + addressHeader + " | " + emailHeader + " | " + phoneHeader);
+        viewServiceProviderTableFormat(serviceProviderList);
         
         //have to fix for only approved status
         for (ServiceProviderEntity serviceProvider : serviceProviderList) {
@@ -214,52 +180,13 @@ public class AdminOperationMenu {
         System.out.print("\n");
     }
     
-    public void approveServiceProvider() {
+    public void approveServiceProviders() {
         Scanner sc = new Scanner(System.in);
         List<ServiceProviderEntity> pendingList = serviceProviderEntitySessionBeanRemote.retrievePendingServiceProviders();
-        String nameHeader = "Name";
-        String businessCategoryHeader = "Business Category";
-        String businessRegNoHeader = "Business Reg. No.";
-        String cityHeader = "City";
-        String addressHeader = "Address";
-        String emailHeader = "Email";
-        String phoneHeader = "Phone";
-        for (ServiceProviderEntity serviceProvider : pendingList) {
-            if (serviceProvider.getName().length() > nameHeader.length()) {
-                int i = serviceProvider.getName().length();
-                nameHeader = padRight(nameHeader, i);
-            }
-            if (serviceProvider.getBusinessCategory().length() > businessCategoryHeader.length()) {
-                int i = serviceProvider.getBusinessCategory().length();
-                businessCategoryHeader = padRight(businessCategoryHeader, i);
-            }
-            if (serviceProvider.getBusinessRegNumber().length() > businessRegNoHeader.length()) {
-                int i = serviceProvider.getBusinessRegNumber().length();
-                businessRegNoHeader = padRight(businessRegNoHeader, i);
-            }
-            if (serviceProvider.getCity().length() > cityHeader.length()) {
-                int i = serviceProvider.getCity().length();
-                cityHeader = padRight(cityHeader, i);
-            }
-            if (serviceProvider.getAddress().length() > addressHeader.length()) {
-                int i = serviceProvider.getAddress().length();
-                addressHeader = padRight(addressHeader, i);
-            }
-            if (serviceProvider.getEmail().length() > emailHeader.length()) {
-                int i = serviceProvider.getEmail().length();
-                emailHeader = padRight(emailHeader, i);
-            }
-            if (serviceProvider.getPhone().length() > phoneHeader.length()) {
-                int i = serviceProvider.getPhone().length();
-                phoneHeader = padRight(phoneHeader, i);
-            }
-        }
-        System.out.println("Id| " + nameHeader + " | " + businessCategoryHeader + " | " + businessRegNoHeader + " | " + cityHeader + " | " + addressHeader + " | " + emailHeader + " | " + phoneHeader);
+        serviceProviderApproveAndBlockTableFormat(pendingList);
 
         for (ServiceProviderEntity serviceProvider : pendingList) {
-            int i = 1;
             serviceProvider.toStringWithBusinessNo();
-            i ++;
         }
         System.out.print("\n");
         while (true) {
@@ -271,19 +198,50 @@ public class AdminOperationMenu {
                     System.out.print("\n");
                     break;
                 }
-                ServiceProviderEntity serviceProviderToApprove = serviceProviderEntitySessionBeanRemote.retrieveServiceProviderByUniqueIdNumber(serviceProviderId);
-                if (serviceProviderToApprove.getStatusEnum() == StatusEnum.APPROVE) {
-                    System.out.println("Service Provider is already approved!");
-                } else {
-                    serviceProviderToApprove.setStatusEnum(StatusEnum.APPROVE);
-                    System.out.println(serviceProviderToApprove.getName() + "'s registration is approved.");
-                }
-            } catch (ServiceProviderNotFoundException ex) {
-            System.out.println("Approval failed! " + ex.getMessage());
-                }
+                ServiceProviderEntity serviceProviderToApprove  = serviceProviderEntitySessionBeanRemote.retrieveServiceProviderByUniqueIdNumber(serviceProviderId);
+                serviceProviderEntitySessionBeanRemote.approveServiceProvider(serviceProviderToApprove);
+                System.out.println(serviceProviderToApprove.getName() + " 's registration is approved!");
+            }
+            catch (ServiceProviderNotFoundException | ServiceProviderApproveException ex) {
+                System.out.println("Approval failed! " + ex.getMessage());
+            }
             catch (InputMismatchException ex) {
                 System.out.println("Invalid input! Please enter a numeric value!");
             } 
+            sc.nextLine();
+        }
+    }
+    
+    public void blockServiceProviders() {
+        Scanner sc = new Scanner(System.in);
+        List<ServiceProviderEntity> pendingList = serviceProviderEntitySessionBeanRemote.retrievePendingServiceProviders();
+        List<ServiceProviderEntity> approveList = serviceProviderEntitySessionBeanRemote.retrieveApprovedServiceProviders();
+        List<ServiceProviderEntity> pendingAndApprove = Stream.concat(pendingList.stream(), approveList.stream()).collect(Collectors.toList());
+        serviceProviderApproveAndBlockTableFormat(pendingAndApprove);
+        
+        for (ServiceProviderEntity serviceProvider : pendingAndApprove) {
+            serviceProvider.toStringWithBusinessNo();
+        }
+        System.out.print("\n");
+        while (true) {
+            System.out.println("Enter 0 to go back to the previous menu");
+            System.out.print("Enter service provider Id> ");
+            try {
+                Long serviceProviderId = sc.nextLong();
+                if(serviceProviderId.equals(0L)) {
+                    System.out.print("\n");
+                    break;
+                }
+                ServiceProviderEntity serviceProviderToBlock = serviceProviderEntitySessionBeanRemote.retrieveServiceProviderByUniqueIdNumber(serviceProviderId);
+                serviceProviderEntitySessionBeanRemote.blockServiceProvider(serviceProviderToBlock);
+                System.out.println(serviceProviderToBlock.getName() + " successfully blocked!");
+            }
+            catch (ServiceProviderNotFoundException | ServiceProviderBlockedException ex) {
+                    System.out.println("Block failed! " + ex.getMessage());
+            } 
+            catch (InputMismatchException ex) {
+                System.out.println("Invalid input! Please enter a numeric value!");
+            }
             sc.nextLine();
         }
     }
