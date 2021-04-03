@@ -26,6 +26,4 @@ public interface ServiceProviderEntitySessionBeanLocal{
     public List<ServiceProviderEntity> retrieveAllServiceProvider();
 
     public List<ServiceProviderEntity> retrievePendingServiceProviders();
-
-    public void approveServiceProvider(Long id);
 }
