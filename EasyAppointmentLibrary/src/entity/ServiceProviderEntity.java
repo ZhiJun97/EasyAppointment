@@ -104,9 +104,8 @@ public class ServiceProviderEntity implements Serializable {
                String.format("%-4s", this.getName()) + " | " + 
                String.format("%-17s", this.getBusinessCategory()) + " | " + 
                String.format("%-4s", this.getCity()) + " | " + 
-               String.format("%-7s", this.getAddress()) + " | " + 
-               String.format("%-5s", this.getEmail()) + " | " +
-               String.format("%-5s", this.getPhone());
+               String.format("%-14s", this.getRatingCount()) + " | " + 
+               this.getStatusEnum();
     }
     
     public void toStringWithBusinessNo() {

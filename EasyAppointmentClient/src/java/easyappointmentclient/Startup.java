@@ -273,6 +273,7 @@ public class Startup {
                 exitNumber = sc.nextInt();
                 
                 if(exitNumber == 0) {
+                    sc.nextLine();
                     loginTerminal(entity);
                 }
             }
@@ -313,6 +314,7 @@ public class Startup {
                 exitNumber = sc.nextInt();
                 
                 if(exitNumber == 0) {
+                    sc.nextLine();
                     loginTerminal(entity);
                 }
             }
