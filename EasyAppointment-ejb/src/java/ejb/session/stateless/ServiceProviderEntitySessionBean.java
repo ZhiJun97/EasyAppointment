@@ -10,6 +10,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import util.enumeration.StatusEnum;
 import util.exception.InvalidLoginCredentialException;
 import util.exception.ServiceProviderNotFoundException;
 
@@ -41,12 +42,12 @@ public class ServiceProviderEntitySessionBean implements ServiceProviderEntitySe
         
         if(serviceProviderEntity != null)
         {
-            serviceProviderEntity.getAppointmentEntity().size();
+            //serviceProviderEntity.getAppointmentEntity().size();
             return serviceProviderEntity;
         }
         else
         {
-            throw new ServiceProviderNotFoundException("Unique ID Number " + uniqueIdNumber + " does not exist!");
+            throw new ServiceProviderNotFoundException("Service Provider ID Number " + uniqueIdNumber + " does not exist!");
         }
     }
     
@@ -98,6 +99,29 @@ public class ServiceProviderEntitySessionBean implements ServiceProviderEntitySe
             throw new InvalidLoginCredentialException("Email does not exist or invalid password!");
         }
     }
+    
+    @Override
+    public List<ServiceProviderEntity> retrievePendingServiceProviders() {
+        Query query = em.createQuery("SELECT s FROM ServiceProviderEntity s WHERE s.statusEnum = util.enumeration.StatusEnum.PENDING");
+        return query.getResultList();
+    }
+    
+    @Override
+    public void approveServiceProvider(Long id) {
+        System.out.println("in here");
+        try {
+            ServiceProviderEntity serviceProviderToApprove = retrieveServiceProviderByUniqueIdNumber(id);
+            if (serviceProviderToApprove.getStatusEnum() == StatusEnum.APPROVE) {
+                System.out.println("Service Provider is already approved!");
+            } else {
+                serviceProviderToApprove.setStatusEnum(StatusEnum.APPROVE);
+                System.out.println(serviceProviderToApprove.getName() + "'s registration is approved.");
+
+            }
+        } catch (ServiceProviderNotFoundException ex) {
+            System.out.println("Approval failed! " + ex.getMessage());
+        }
+    }   
 
     @Override
     public void updateServiceProviderEntity(ServiceProviderEntity serviceProviderEntity) {

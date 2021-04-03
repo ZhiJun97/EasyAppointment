@@ -24,4 +24,8 @@ public interface ServiceProviderEntitySessionBeanLocal{
     public void deleteServiceProviderEntity(Long uniqueIdNumber) throws ServiceProviderNotFoundException;
 
     public List<ServiceProviderEntity> retrieveAllServiceProvider();
+
+    public List<ServiceProviderEntity> retrievePendingServiceProviders();
+
+    public void approveServiceProvider(Long id);
 }
