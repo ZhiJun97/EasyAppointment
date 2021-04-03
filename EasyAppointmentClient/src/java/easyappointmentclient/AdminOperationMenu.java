@@ -265,18 +265,26 @@ public class AdminOperationMenu {
         while (true) {
             System.out.println("Enter 0 to go back to the previous menu.");
             System.out.print("Enter service provider Id> ");
-            Long serviceProviderId = 0L;
             try {
-                serviceProviderId = sc.nextLong();
+                Long serviceProviderId = sc.nextLong();
                 if (serviceProviderId.equals(0L)) {
+                    System.out.print("\n");
                     break;
                 }
-            }
+                ServiceProviderEntity serviceProviderToApprove = serviceProviderEntitySessionBeanRemote.retrieveServiceProviderByUniqueIdNumber(serviceProviderId);
+                if (serviceProviderToApprove.getStatusEnum() == StatusEnum.APPROVE) {
+                    System.out.println("Service Provider is already approved!");
+                } else {
+                    serviceProviderToApprove.setStatusEnum(StatusEnum.APPROVE);
+                    System.out.println(serviceProviderToApprove.getName() + "'s registration is approved.");
+                }
+            } catch (ServiceProviderNotFoundException ex) {
+            System.out.println("Approval failed! " + ex.getMessage());
+                }
             catch (InputMismatchException ex) {
                 System.out.println("Invalid input! Please enter a numeric value!");
             } 
             sc.nextLine();
-            serviceProviderEntitySessionBeanRemote.approveServiceProvider(serviceProviderId);
         }
     }
 }

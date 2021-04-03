@@ -105,23 +105,23 @@ public class ServiceProviderEntitySessionBean implements ServiceProviderEntitySe
         Query query = em.createQuery("SELECT s FROM ServiceProviderEntity s WHERE s.statusEnum = util.enumeration.StatusEnum.PENDING");
         return query.getResultList();
     }
-    
-    @Override
-    public void approveServiceProvider(Long id) {
-        System.out.println("in here");
-        try {
-            ServiceProviderEntity serviceProviderToApprove = retrieveServiceProviderByUniqueIdNumber(id);
-            if (serviceProviderToApprove.getStatusEnum() == StatusEnum.APPROVE) {
-                System.out.println("Service Provider is already approved!");
-            } else {
-                serviceProviderToApprove.setStatusEnum(StatusEnum.APPROVE);
-                System.out.println(serviceProviderToApprove.getName() + "'s registration is approved.");
-
-            }
-        } catch (ServiceProviderNotFoundException ex) {
-            System.out.println("Approval failed! " + ex.getMessage());
-        }
-    }   
+//    
+//    @Override
+//    public void approveServiceProvider(Long id) {
+//        System.out.println("in here");
+//        try {
+//            ServiceProviderEntity serviceProviderToApprove = retrieveServiceProviderByUniqueIdNumber(id);
+//            if (serviceProviderToApprove.getStatusEnum() == StatusEnum.APPROVE) {
+//                System.out.println("Service Provider is already approved!");
+//            } else {
+//                serviceProviderToApprove.setStatusEnum(StatusEnum.APPROVE);
+//                System.out.println(serviceProviderToApprove.getName() + "'s registration is approved.");
+//
+//            }
+//        } catch (ServiceProviderNotFoundException ex) {
+//            System.out.println("Approval failed! " + ex.getMessage());
+//        }
+//    }   
 
     @Override
     public void updateServiceProviderEntity(ServiceProviderEntity serviceProviderEntity) {
