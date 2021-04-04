@@ -8,8 +8,14 @@ package easyappointmentclient;
 import ejb.session.stateless.ServiceProviderEntitySessionBeanRemote;
 import entity.AppointmentEntity;
 import entity.ServiceProviderEntity;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.InputMismatchException;
+import java.util.List;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -67,7 +73,16 @@ public class ServiceProviderOperationMenu {
     }
     
     public void viewProfile() {
-        System.out.println("Current Profile: " + serviceProviderEntity.toString());
+        System.out.println("*** Service provider terminal :: View Profile ***\n");
+        System.out.println(String.format("%-2s", "ID") + "| " +
+                           String.format("%-20s", "Name") + " | " + 
+                           String.format("%-18s", "Business Category") + " | " + 
+                           String.format("%-17s", "Registration No.") + " | " +
+                           String.format("%-12s", "City") + " | " + 
+                           String.format("%-25s", "Address") + " | " + 
+                           String.format("%-18s", "Email") + " | " +
+                           String.format("%-8s", "Phone"));
+        System.out.println(serviceProviderEntity.toStringWithBusinessNo());
     }
     
     public void editProfile() {
@@ -112,14 +127,17 @@ public class ServiceProviderOperationMenu {
     
     //in-progress
     public void viewAppointments() {
-        System.out.println("Updating service provider's appointments list...");
-        //serviceProviderEntitySessionBeanRemote.newestAppointmentList(serviceProviderEntity);
-        System.out.print("Appointments:");
-        for (AppointmentEntity appointment : serviceProviderEntity.getAppointmentEntity()) {
-            System.out.println(appointment.getCustomerEntity().getEmailAddress()+ " | " + 
-            "   | " + appointment.getAppointmentDate().toString() + "  | " + 
-            appointment.getAppointmentTime().toString() + " | " + 
-            appointment.getAppointmentNo());
+        
+        System.out.println("*** Service provider terminal :: View Appointments ***\n");
+        System.out.println(String.format("%-15s", "Name") + "| " +
+                           String.format("%-35s", "Date & Time") + " | " + 
+                           String.format("%-17s", "Appointment No."));
+        
+        List<AppointmentEntity> appointments = serviceProviderEntity.getAppointmentEntity();
+        for (AppointmentEntity appointment : appointments) {
+            System.out.println(String.format("%-15s", appointment.getServiceProviderEntity().getName()) + "| " +
+                               String.format("%-35s", appointment.getAppointmentDate()) + " | " +
+                               String.format("%-17s", appointment.getAppointmentNo()));
         }
     }
 }
