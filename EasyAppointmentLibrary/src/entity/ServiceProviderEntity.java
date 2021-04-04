@@ -31,6 +31,8 @@ public class ServiceProviderEntity implements Serializable {
     private String address;
     private String city;
     private String phone;
+    private double ratingAverage;
+    private int ratingCount;
     @Column(unique = true, nullable = false)
     private String email; //username
     @Column(nullable = false)
@@ -53,9 +55,10 @@ public class ServiceProviderEntity implements Serializable {
         this.email = email;
         this.phone = phone;
         this.password = password;
+        this.statusEnum = StatusEnum.PENDING;
     }
 
-    public ServiceProviderEntity(String businessRegNumber, String businessCategory, String name, String address, String city, String email, String password, StatusEnum statusEnum, List<AppointmentEntity> appointmentEntity) {
+    public ServiceProviderEntity(String businessRegNumber, String businessCategory, String name, String address, String city, String email, String password, List<AppointmentEntity> appointmentEntity) {
         this.businessRegNumber = businessRegNumber;
         this.businessCategory = businessCategory;
         this.name = name;
@@ -63,8 +66,8 @@ public class ServiceProviderEntity implements Serializable {
         this.city = city;
         this.email = email;
         this.password = password;
-        this.statusEnum = statusEnum;
         this.appointmentEntity = appointmentEntity;
+        this.statusEnum = StatusEnum.PENDING;
     }
 
     public Long getServiceProviderId() {
@@ -97,13 +100,23 @@ public class ServiceProviderEntity implements Serializable {
 
     @Override
     public String toString() {
-        return String.format("%-2s", this.getServiceProviderId()) + " | " +
+        return String.format("%-2s", this.getServiceProviderId()) + "| " +
                String.format("%-4s", this.getName()) + " | " + 
                String.format("%-17s", this.getBusinessCategory()) + " | " + 
                String.format("%-4s", this.getCity()) + " | " + 
+               String.format("%-14s", this.getRatingCount()) + " | " + 
+               this.getStatusEnum();
+    }
+    
+    public void toStringWithBusinessNo() {
+        System.out.println(String.format("%-2s", this.getServiceProviderId()) + "| " +
+               String.format("%-4s", this.getName()) + " | " + 
+               String.format("%-17s", this.getBusinessCategory()) + " | " + 
+               String.format("%-17s", this.getBusinessRegNumber()) + " | " +
+               String.format("%-4s", this.getCity()) + " | " + 
                String.format("%-7s", this.getAddress()) + " | " + 
                String.format("%-5s", this.getEmail()) + " | " +
-               String.format("%-5s", this.getPhone());
+               String.format("%-5s", this.getPhone()));
     }
 
     public Long getUniqueIdNumber() {
@@ -192,5 +205,21 @@ public class ServiceProviderEntity implements Serializable {
 
     public void setAppointmentEntity(List<AppointmentEntity> appointmentEntity) {
         this.appointmentEntity = appointmentEntity;
+    }
+    
+        public double getRatingAverage() {
+        return ratingAverage;
+    }
+
+    public void setRatingAverage(double ratingAverage) {
+        this.ratingAverage = ratingAverage;
+    }
+
+    public int getRatingCount() {
+        return ratingCount;
+    }
+
+    public void setRatingCount(int ratingCount) {
+        this.ratingCount = ratingCount;
     }
 }

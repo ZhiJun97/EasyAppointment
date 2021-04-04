@@ -4,6 +4,8 @@ import entity.ServiceProviderEntity;
 import java.util.List;
 import util.exception.InvalidLoginCredentialException;
 import util.exception.ServiceProviderNotFoundException;
+import util.exception.ServiceProviderApproveException;
+import util.exception.ServiceProviderBlockedException;
 
 /**
  *
@@ -24,4 +26,13 @@ public interface ServiceProviderEntitySessionBeanLocal{
     public void deleteServiceProviderEntity(Long uniqueIdNumber) throws ServiceProviderNotFoundException;
 
     public List<ServiceProviderEntity> retrieveAllServiceProvider();
+
+    public List<ServiceProviderEntity> retrievePendingServiceProviders();
+
+    public List<ServiceProviderEntity> retrieveApprovedServiceProviders();
+
+    public void approveServiceProvider(ServiceProviderEntity serviceProviderEntity) throws ServiceProviderNotFoundException, ServiceProviderApproveException;
+
+    public void blockServiceProvider(ServiceProviderEntity serviceProviderEntity) throws ServiceProviderNotFoundException, ServiceProviderBlockedException;
+
 }
