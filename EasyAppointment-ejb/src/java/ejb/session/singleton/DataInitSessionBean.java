@@ -15,6 +15,7 @@ import javax.ejb.Singleton;
 import javax.ejb.LocalBean;
 import javax.ejb.Startup;
 import util.exception.AdminNotFoundException;
+import util.exception.AppointmentNotFoundException;
 import util.exception.CustomerNotFoundException;
 import util.exception.ServiceProviderNotFoundException;
 import util.helper.DateUtil;
@@ -54,18 +55,10 @@ public class DataInitSessionBean {
     
     private void initializeData()
     {  
-        Date myDate = new DateUtil().getDate(2021, 1, 1, 11, 30);
-        
         adminEntitySessionBeanLocal.createAdminEntity(new AdminEntity("admin@easyadm.com", "password"));
         
         serviceProviderEntitySessionBeanLocal.createServiceProviderEntity(new ServiceProviderEntity("A1101", "Restaurant", "John's Special", "Airport Road, Avenue 6", "Singapore", "john@easysp.com", "91234567", "password"));
 
         customerEntitySessionBeanLocal.createCustomerEntity(new CustomerEntity("S1234567F", "password", "Adam", "Tan", "Male", 23, "82345678", "Yishun Ring Road", "Singapore", "adam@easycust.com"));
-    
-        try{
-            appointmentEntitySessionBeanLocal.createAppointmentEntity(new AppointmentEntity("101011130", myDate, myDate, customerEntitySessionBeanLocal.retrieveCustomerById(Long.valueOf(1)), serviceProviderEntitySessionBeanLocal.retrieveServiceProviderByUniqueIdNumber(Long.valueOf(1))));
-        } catch(CustomerNotFoundException | ServiceProviderNotFoundException ex) {
-            ex.getMessage();
-        }
     }
 }
