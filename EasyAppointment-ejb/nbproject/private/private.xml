@@ -3,8 +3,8 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/Users/zhijun/Desktop/UniWork/IS2103/EasyAppointment1/EasyAppointment/EasyAppointment-ejb/src/java/ejb/session/stateless/AppointmentEntitySessionBean.java</file>
-            <file>file:/Users/zhijun/Desktop/UniWork/IS2103/EasyAppointment1/EasyAppointment/EasyAppointment-ejb/src/java/ejb/session/stateless/AdminEntitySessionBean.java</file>
+            <file>file:/Users/zhijun/Desktop/UniWork/IS2103/EasyAppointment1/EasyAppointment/EasyAppointment-ejb/src/java/ejb/session/stateless/ServiceProviderEntitySessionBean.java</file>
+            <file>file:/Users/zhijun/Desktop/UniWork/IS2103/EasyAppointment1/EasyAppointment/EasyAppointment-ejb/src/java/ejb/session/singleton/DataInitSessionBean.java</file>
         </group>
     </open-files>
 </project-private>

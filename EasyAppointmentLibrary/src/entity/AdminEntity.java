@@ -1,6 +1,7 @@
 package entity;
 
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -19,10 +20,17 @@ public class AdminEntity implements Serializable {
     private Long adminId;
     private String email;
     private String password;
+    private List<String> businessCategory;
 
     public AdminEntity() {
     }
 
+    public AdminEntity(String email, String password, List<String> businessCategory) {
+        this.email = email;
+        this.password = password;
+        this.businessCategory = businessCategory;
+    }
+ 
     public AdminEntity(String email, String password) {
         this();
         this.email = email;
