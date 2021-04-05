@@ -169,6 +169,7 @@ public class AdminOperationMenu {
     
     public void viewServiceProvider() {
         List<ServiceProviderEntity> serviceProviderList = serviceProviderEntitySessionBeanRemote.retrieveAllServiceProvider();
+        System.out.println("*** Admin terminal :: View all service provider");
         viewServiceProviderTableFormat(serviceProviderList);
         
         //have to fix for only approved status
@@ -183,6 +184,7 @@ public class AdminOperationMenu {
     public void approveServiceProviders() {
         Scanner sc = new Scanner(System.in);
         List<ServiceProviderEntity> pendingList = serviceProviderEntitySessionBeanRemote.retrievePendingServiceProviders();
+        System.out.println("*** Admin terminal :: Approve service provider ***\n");
         serviceProviderApproveAndBlockTableFormat(pendingList);
 
         for (ServiceProviderEntity serviceProvider : pendingList) {
@@ -217,6 +219,7 @@ public class AdminOperationMenu {
         List<ServiceProviderEntity> pendingList = serviceProviderEntitySessionBeanRemote.retrievePendingServiceProviders();
         List<ServiceProviderEntity> approveList = serviceProviderEntitySessionBeanRemote.retrieveApprovedServiceProviders();
         List<ServiceProviderEntity> pendingAndApprove = Stream.concat(pendingList.stream(), approveList.stream()).collect(Collectors.toList());
+        System.out.println("*** Admin terminal :: Block service provider ***\n");
         serviceProviderApproveAndBlockTableFormat(pendingAndApprove);
         
         for (ServiceProviderEntity serviceProvider : pendingAndApprove) {
@@ -244,5 +247,14 @@ public class AdminOperationMenu {
             }
             sc.nextLine();
         }
+    }
+    
+    public void addBusinessCategory() {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("*** Admin terminal :: Add a Business category ***\n");
+        System.out.println("Enter 0 to go back to the previous menu.");
+        System.out.print("Enter a new business category> ");
+        String businessCategory = sc.nextLine().trim();
+        
     }
 }

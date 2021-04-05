@@ -10,6 +10,7 @@ import entity.AppointmentEntity;
 import entity.CustomerEntity;
 import entity.ServiceProviderEntity;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.InputMismatchException;
 import java.util.List;
@@ -30,7 +31,7 @@ public class CustomerOperationMenu {
         this.customerEntity = customerEntity;
     }
     
-    public void customerOperationMainMenu() throws ServiceProviderNotFoundException {
+    public void customerOperationMainMenu() {
         Scanner sc = new Scanner(System.in);
         Integer response = 0;
         
@@ -55,11 +56,7 @@ public class CustomerOperationMenu {
                 if (response == 1) {
                     doSearchOperation();
                 } else if (response == 2) {
-                    try {
-                        doAddAppointment();
-                    } catch (ServiceProviderNotFoundException e) {
-                        
-                    }
+                    doAddAppointment();
                 } else if (response == 3) {
                     
                 } else if (response == 4) {
@@ -153,7 +150,7 @@ public class CustomerOperationMenu {
         return dateProcessed;
     }
     
-    public void doAddAppointment() throws ServiceProviderNotFoundException {
+    public void doAddAppointment() {
         Scanner sc = new Scanner(System.in);
         
         Date date = doSearchOperation();
@@ -165,7 +162,7 @@ public class CustomerOperationMenu {
         sc.nextLine();
         
         // show customer the service providers available slots
-        ArrayList<Integer> slots = new ArrayList<>(8, 9, 10, 12, 13, 14, 16, 17);
+        ArrayList<Integer> slots = new ArrayList<>(Arrays.asList(8, 9, 10, 12, 13, 14, 16, 17));
         try {
             ServiceProviderEntity serviceProvider = serviceProviderEntitySessionBeanRemote.retrieveServiceProviderByUniqueIdNumber(serviceProviderId);
             List<AppointmentEntity> appointments = serviceProvider.getAppointmentEntity();

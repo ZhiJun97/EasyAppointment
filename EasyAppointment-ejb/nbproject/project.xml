@@ -8,7 +8,6 @@
         <data xmlns="http://www.netbeans.org/ns/j2ee-ejbjarproject/3">
             <name>EasyAppointment-ejb</name>
             <minimum-ant-version>1.6.5</minimum-ant-version>
-            <included-library dirs="200">file.reference.javaee-api-8.0.jar-1</included-library>
             <included-library dirs="200">reference.EasyAppointmentLibrary.jar</included-library>
             <source-roots>
                 <root id="src.dir"/>
