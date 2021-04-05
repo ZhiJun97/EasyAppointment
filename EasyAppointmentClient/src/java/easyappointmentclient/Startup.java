@@ -114,7 +114,7 @@ public class Startup {
                     if (response == 1) {
                         try {
                             login(entity);
-                            adminOperationMenu = new AdminOperationMenu(adminEntity, customerEntitySessionBeanRemote, serviceProviderEntitySessionBeanRemote);
+                            adminOperationMenu = new AdminOperationMenu(adminEntity, customerEntitySessionBeanRemote, serviceProviderEntitySessionBeanRemote, adminEntitySessionBeanRemote);
                             adminOperationMenu.adminOperationMainMenu();
                             System.out.println("Login successful!");
                         } catch (InvalidLoginCredentialException ex) {

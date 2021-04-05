@@ -2,6 +2,7 @@ package ejb.session.stateless;
 
 import entity.AdminEntity;
 import util.exception.AdminNotFoundException;
+import util.exception.CategoryNotFoundException;
 import util.exception.InvalidLoginCredentialException;
 
 
@@ -22,5 +23,9 @@ public interface AdminEntitySessionBeanLocal {
     public void updateAdmin(AdminEntity adminEntity);
 
     public void deleteAdmin(Long id);
+
+    public void addNewBusinessCategory(String businessCategory) throws AdminNotFoundException;
+
+    public void removeBusinessCategory(String businessCategory) throws AdminNotFoundException, CategoryNotFoundException;
     
 }
