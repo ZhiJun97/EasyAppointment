@@ -1,6 +1,8 @@
 package ejb.session.stateless;
 
 import entity.AdminEntity;
+import java.util.ArrayList;
+import java.util.List;
 import javax.ejb.Local;
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
@@ -10,6 +12,7 @@ import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import util.exception.AdminNotFoundException;
+import util.exception.CategoryNotFoundException;
 import util.exception.InvalidLoginCredentialException;
 
 /**
@@ -36,15 +39,48 @@ public class AdminEntitySessionBean implements AdminEntitySessionBeanRemote, Adm
     public AdminEntity retrieveAdminById(Long id) throws AdminNotFoundException {
         AdminEntity adminEntity = em.find(AdminEntity.class, id);
         if (adminEntity != null) {
+            adminEntity.getBusinessCategory().size();
             return adminEntity;
         } else {
             throw new AdminNotFoundException("Admin id : " + id + " does not exist!");
         }
     }
     
+    public AdminEntity retrieveFirstAdmin() throws AdminNotFoundException {
+        Query query = em.createQuery("SELECT a FROM AdminEntity a WHERE a.adminId = 1");
+        AdminEntity adminEntity = (AdminEntity)query.getSingleResult();
+        adminEntity.getBusinessCategory().size();
+        return adminEntity;
+    }
+    
+    @Override
+    public void addNewBusinessCategory(String businessCategory) throws AdminNotFoundException {
+        AdminEntity adminEntityToAdd = retrieveFirstAdmin();
+            List<String> categories = adminEntityToAdd.getBusinessCategory();
+            if (categories.isEmpty()) {
+                List<String> newList = new ArrayList();
+                newList.add(businessCategory);
+                adminEntityToAdd.setBusinessCategory(newList);
+            } else {
+            categories.add(businessCategory);
+            }
+    }
+    
+    @Override
+    public void removeBusinessCategory(String businessCategory) throws AdminNotFoundException, CategoryNotFoundException {
+        AdminEntity adminEntityToRemove = retrieveFirstAdmin();
+        List<String> categories = adminEntityToRemove.getBusinessCategory();
+        if (categories.contains(businessCategory)) {
+            categories.remove(businessCategory);
+        } else {
+            throw new CategoryNotFoundException("Category does not exist!");
+        }
+        
+    }
+     
     @Override
     public AdminEntity retrieveAdminByEmail(String email) throws AdminNotFoundException {
-        Query query = em.createQuery("SELECT a FROM AdminEntity a WHERE a.email = :inEmail");
+        Query query = em.createQuery("SELECT a FROM AdminEntity a WHERE a.email = :inEmail"); 
         query.setParameter("inEmail", email);
         try {
             return (AdminEntity)query.getSingleResult();

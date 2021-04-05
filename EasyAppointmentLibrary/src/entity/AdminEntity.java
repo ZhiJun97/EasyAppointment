@@ -30,6 +30,14 @@ public class AdminEntity implements Serializable {
         this.password = password;
         this.businessCategory = businessCategory;
     }
+
+    public List<String> getBusinessCategory() {
+        return businessCategory;
+    }
+
+    public void setBusinessCategory(List<String> businessCategory) {
+        this.businessCategory = businessCategory;
+    }
  
     public AdminEntity(String email, String password) {
         this();

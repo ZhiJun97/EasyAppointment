@@ -5,6 +5,7 @@
  */
 package easyappointmentclient;
 
+import ejb.session.stateless.AdminEntitySessionBeanRemote;
 import ejb.session.stateless.CustomerEntitySessionBeanRemote;
 import ejb.session.stateless.ServiceProviderEntitySessionBeanRemote;
 import entity.AdminEntity;
@@ -16,6 +17,8 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import util.exception.AdminNotFoundException;
+import util.exception.CategoryNotFoundException;
 import util.exception.CustomerNotFoundException;
 import util.exception.ServiceProviderNotFoundException;
 import util.exception.ServiceProviderApproveException;
@@ -31,14 +34,16 @@ public class AdminOperationMenu {
     private AdminEntity adminEntity;
     private CustomerEntitySessionBeanRemote customerEntitySessionBeanRemote;
     private ServiceProviderEntitySessionBeanRemote serviceProviderEntitySessionBeanRemote;
+    private AdminEntitySessionBeanRemote adminEntitySessionBeanRemote;
     
     public AdminOperationMenu() {
     }
 
-    public AdminOperationMenu(AdminEntity adminEntity, CustomerEntitySessionBeanRemote customerEntitySessionBeanRemote, ServiceProviderEntitySessionBeanRemote serviceProviderEntitySessionBeanRemote) {
+    public AdminOperationMenu(AdminEntity adminEntity, CustomerEntitySessionBeanRemote customerEntitySessionBeanRemote, ServiceProviderEntitySessionBeanRemote serviceProviderEntitySessionBeanRemote, AdminEntitySessionBeanRemote adminEntitySessionBeanRemote) {
         this.adminEntity = adminEntity;
         this.customerEntitySessionBeanRemote = customerEntitySessionBeanRemote;
         this.serviceProviderEntitySessionBeanRemote = serviceProviderEntitySessionBeanRemote;
+        this.adminEntitySessionBeanRemote = adminEntitySessionBeanRemote;
     }
     
     public void adminOperationMainMenu() {
@@ -78,9 +83,9 @@ public class AdminOperationMenu {
                 } else if (response == 5) {
                     blockServiceProviders();
                 } else if (response == 6) {
-                    
+                    addBusinessCategory();
                 } else if (response == 7) {
-                    
+                    removeBusinessCategory();
                 } else if (response == 8) {
                     
                 } else if (response == 9) {
@@ -188,7 +193,7 @@ public class AdminOperationMenu {
         serviceProviderApproveAndBlockTableFormat(pendingList);
 
         for (ServiceProviderEntity serviceProvider : pendingList) {
-            serviceProvider.toStringWithBusinessNo();
+            System.out.println(serviceProvider.toStringWithBusinessNo());
         }
         System.out.print("\n");
         while (true) {
@@ -223,7 +228,7 @@ public class AdminOperationMenu {
         serviceProviderApproveAndBlockTableFormat(pendingAndApprove);
         
         for (ServiceProviderEntity serviceProvider : pendingAndApprove) {
-            serviceProvider.toStringWithBusinessNo();
+            System.out.println(serviceProvider.toStringWithBusinessNo());
         }
         System.out.print("\n");
         while (true) {
@@ -252,9 +257,58 @@ public class AdminOperationMenu {
     public void addBusinessCategory() {
         Scanner sc = new Scanner(System.in);
         System.out.println("*** Admin terminal :: Add a Business category ***\n");
-        System.out.println("Enter 0 to go back to the previous menu.");
-        System.out.print("Enter a new business category> ");
-        String businessCategory = sc.nextLine().trim();
-        
+        while (true) {
+            try {
+                System.out.println("Enter 0 to go back to the previous menu.");
+                System.out.print("Type in the business category to remove> ");
+                if (sc.hasNextInt()) {
+                    int response = sc.nextInt();
+                    if (response == 0) {
+                        break;
+                    } else {
+                        System.out.println("Please enter a valid input!");
+                    }
+                } else if (sc.hasNextLine()) {
+                    String businessCategory = sc.nextLine().trim();
+                    adminEntitySessionBeanRemote.addNewBusinessCategory(businessCategory);
+                    System.out.println("The business category " + "\" " + businessCategory + "\" " + " is added");
+                }
+            }
+            catch (AdminNotFoundException ex) {
+                System.out.println("Adding business category failed! " + ex.getMessage());
+            }
+            catch (InputMismatchException ex) {
+                System.out.println("Please enter a valid input!");
+            }
+        }
+    }
+    
+    public void removeBusinessCategory() {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("*** Admin terminal :: Remove a Business category ***\n");
+        while (true) {
+            try {
+                System.out.println("Enter 0 to go back to the previous menu.");
+                System.out.print("Type in the business category to remove> ");
+                if (sc.hasNextInt()) {
+                    int response = sc.nextInt();
+                    if (response == 0) {
+                        break;
+                    } else {
+                        System.out.println("Please enter a valid input!");
+                    }
+                } else if (sc.hasNextLine()) {
+                    String businessCategory = sc.nextLine().trim();
+                    adminEntitySessionBeanRemote.removeBusinessCategory(businessCategory);
+                    System.out.println("The business category " + "\" " + businessCategory + "\" " + " has been removed");
+                }
+            }
+            catch (AdminNotFoundException | CategoryNotFoundException ex) {
+                System.out.println("Removing business category failed! " + ex.getMessage());
+            }
+            catch (InputMismatchException ex) {
+                System.out.println("Please enter a valid input!");
+            }
+        }
     }
 }
