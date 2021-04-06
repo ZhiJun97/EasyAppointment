@@ -112,7 +112,7 @@ public class CustomerOperationMenu {
         Date dateProcessed = processDate(date);
         // if entered date is a sunday, inform user and try again
         while (dateProcessed.getDay() == 0) {
-            System.out.println("Entered date is a Sunday, service providers do not operate un Sundays. Please enter another date.");
+            System.out.println("Entered date is a Sunday, service providers do not operate on Sundays. Please enter another date.");
             System.out.print("Enter Date (YYYY-MM-DD)> ");
             date = sc.nextLine().trim();
             dateProcessed = processDate(date);
