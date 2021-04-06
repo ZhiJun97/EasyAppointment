@@ -6,14 +6,23 @@
 package easyappointmentclient;
 
 import ejb.session.stateless.AdminEntitySessionBeanRemote;
+import ejb.session.stateless.AppointmentEntitySessionBeanRemote;
 import ejb.session.stateless.ServiceProviderEntitySessionBeanRemote;
 import ejb.session.stateless.CustomerEntitySessionBeanRemote;
 import entity.AdminEntity;
+import entity.AppointmentEntity;
 import entity.CustomerEntity;
 import entity.ServiceProviderEntity;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.InputMismatchException;
+import java.util.List;
 import java.util.Scanner;
+import util.exception.AppointmentNotFoundException;
+import util.exception.CustomerNotFoundException;
 import util.exception.InvalidLoginCredentialException;
+import util.exception.ServiceProviderNotFoundException;
+import util.helper.DateUtil;
 
 /**
  *
@@ -24,6 +33,8 @@ public class Startup {
     private CustomerEntitySessionBeanRemote customerEntitySessionBeanRemote;
     private ServiceProviderEntitySessionBeanRemote serviceProviderEntitySessionBeanRemote;
     private AdminEntitySessionBeanRemote adminEntitySessionBeanRemote;
+    private AppointmentEntitySessionBeanRemote appointmentEntitySessionBeanRemote;
+    
     private ServiceProviderOperationMenu serviceProviderOperationMenu;
     private AdminOperationMenu adminOperationMenu;
     private CustomerOperationMenu customerOperationMenu;
@@ -31,17 +42,20 @@ public class Startup {
     private AdminEntity adminEntity;
     private ServiceProviderEntity serviceProviderEntity;
     private CustomerEntity customerEntity;
+    private AppointmentEntity appointmentEntity;
 
     public Startup() {
     }
     
-    public Startup(CustomerEntitySessionBeanRemote customerEntitySessionBeanRemote, ServiceProviderEntitySessionBeanRemote serviceProviderEntitySessionBeanRemote, AdminEntitySessionBeanRemote adminEntitySessionBeanRemote) {
+    public Startup(CustomerEntitySessionBeanRemote customerEntitySessionBeanRemote, ServiceProviderEntitySessionBeanRemote serviceProviderEntitySessionBeanRemote, AdminEntitySessionBeanRemote adminEntitySessionBeanRemote, AppointmentEntitySessionBeanRemote appointmentEntitySessionBeanRemote) {
         this.customerEntitySessionBeanRemote = customerEntitySessionBeanRemote;
         this.serviceProviderEntitySessionBeanRemote = serviceProviderEntitySessionBeanRemote;
         this.adminEntitySessionBeanRemote = adminEntitySessionBeanRemote;
+        this.appointmentEntitySessionBeanRemote = appointmentEntitySessionBeanRemote;
     }
     
     public void start() {
+        initAppointment();
         Scanner sc = new Scanner(System.in);
         Integer response = 0;
         
@@ -100,7 +114,7 @@ public class Startup {
                     if (response == 1) {
                         try {
                             login(entity);
-                            adminOperationMenu = new AdminOperationMenu(adminEntity, customerEntitySessionBeanRemote, serviceProviderEntitySessionBeanRemote);
+                            adminOperationMenu = new AdminOperationMenu(adminEntity, customerEntitySessionBeanRemote, serviceProviderEntitySessionBeanRemote, adminEntitySessionBeanRemote);
                             adminOperationMenu.adminOperationMainMenu();
                             System.out.println("Login successful!");
                         } catch (InvalidLoginCredentialException ex) {
@@ -123,7 +137,7 @@ public class Startup {
                 System.out.println("1: Registration");
                 System.out.println("2: Login");
                 System.out.println("3: Exit\n");
-
+                
                 while (response < 1 || response > 3) {
                     try {
                         System.out.print("> ");
@@ -150,10 +164,11 @@ public class Startup {
                         System.out.println("Invalid option! Please try again!\n");
                         break;
                     }
-                } 
+                }
                 if (response == 3) {
                     break;
                 }
+                response = 0;
             }            
         } if(entity.equals("Customer")) {
             while (true) {
@@ -161,7 +176,8 @@ public class Startup {
                 System.out.println("1: Registration");
                 System.out.println("2: Login");
                 System.out.println("3: Exit\n");
-
+                response = 0;
+                
                 while (response < 1 || response > 3) {
                     try {
                         System.out.print("> ");
@@ -193,7 +209,6 @@ public class Startup {
                     break;
                 }
             }            
-            
         }
     }
     
@@ -273,7 +288,6 @@ public class Startup {
                 exitNumber = sc.nextInt();
                 
                 if(exitNumber == 0) {
-                    sc.nextLine();
                     loginTerminal(entity);
                 }
             }
@@ -318,6 +332,36 @@ public class Startup {
                     loginTerminal(entity);
                 }
             }
+        }
+    }
+    
+    public void initAppointment() {
+        
+        Date myDate = new DateUtil().getDate(2021, 1, 1, 11, 30);
+        
+        try {
+            ServiceProviderEntity SPEntity = serviceProviderEntitySessionBeanRemote.retrieveServiceProviderByUniqueIdNumber(Long.valueOf(1));
+            //CustomerEntity CustEntity = customerEntitySessionBeanRemote.retrieveCustomerById(Long.valueOf(1));
+            Long appointmentId = appointmentEntitySessionBeanRemote.createAppointmentEntity(new AppointmentEntity("101011130", myDate, myDate));
+            AppointmentEntity ApptEntity = appointmentEntitySessionBeanRemote.retrieveAppointmentById(appointmentId);
+
+            SPEntity.setAppointmentEntity(new ArrayList<AppointmentEntity>());
+            //CustEntity.setAppointmentEntity(new ArrayList<AppointmentEntity>());
+
+            //Lazy Fetching for ServiceProviderEntity --- AppointmentEntity
+            ApptEntity.setServiceProviderEntity(SPEntity);
+            SPEntity.getAppointmentEntity().add(ApptEntity);
+
+            //Lazy Fetching for CustomerEntity --- AppointmentEntity
+            //ApptEntity.setCustomerEntity(CustEntity);
+            //CustEntity.getAppointmentEntity().add(ApptEntity);
+            
+            //customerEntitySessionBeanRemote.updateCustomerEntity(CustEntity);
+            serviceProviderEntitySessionBeanRemote.updateServiceProviderEntity(SPEntity);
+            appointmentEntitySessionBeanRemote.updateAppointment(ApptEntity);
+
+        } catch (ServiceProviderNotFoundException | AppointmentNotFoundException ex) {
+            ex.getMessage();
         }
     }
 }

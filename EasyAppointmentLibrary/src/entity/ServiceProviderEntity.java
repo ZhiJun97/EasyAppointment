@@ -56,6 +56,7 @@ public class ServiceProviderEntity implements Serializable {
         this.phone = phone;
         this.password = password;
         this.statusEnum = StatusEnum.PENDING;
+        this.appointmentEntity = new ArrayList<AppointmentEntity>();
     }
 
     public ServiceProviderEntity(String businessRegNumber, String businessCategory, String name, String address, String city, String email, String password, List<AppointmentEntity> appointmentEntity) {
@@ -108,15 +109,15 @@ public class ServiceProviderEntity implements Serializable {
                this.getStatusEnum();
     }
     
-    public void toStringWithBusinessNo() {
-        System.out.println(String.format("%-2s", this.getServiceProviderId()) + "| " +
+    public String toStringWithBusinessNo() {
+        return String.format("%-2s", this.getServiceProviderId()) + "| " +
                String.format("%-4s", this.getName()) + " | " + 
                String.format("%-17s", this.getBusinessCategory()) + " | " + 
                String.format("%-17s", this.getBusinessRegNumber()) + " | " +
                String.format("%-4s", this.getCity()) + " | " + 
                String.format("%-7s", this.getAddress()) + " | " + 
                String.format("%-5s", this.getEmail()) + " | " +
-               String.format("%-5s", this.getPhone()));
+               String.format("%-5s", this.getPhone());
     }
 
     public Long getUniqueIdNumber() {
