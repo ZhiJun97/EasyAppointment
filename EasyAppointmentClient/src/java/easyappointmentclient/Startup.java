@@ -9,6 +9,7 @@ import ejb.session.stateless.AdminEntitySessionBeanRemote;
 import ejb.session.stateless.AppointmentEntitySessionBeanRemote;
 import ejb.session.stateless.ServiceProviderEntitySessionBeanRemote;
 import ejb.session.stateless.CustomerEntitySessionBeanRemote;
+import ejb.session.stateless.EmailSessionBeanRemote;
 import entity.AdminEntity;
 import entity.AppointmentEntity;
 import entity.CustomerEntity;
@@ -16,7 +17,6 @@ import entity.ServiceProviderEntity;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.InputMismatchException;
-import java.util.List;
 import java.util.Scanner;
 import util.exception.AppointmentNotFoundException;
 import util.exception.CustomerNotFoundException;
@@ -34,6 +34,7 @@ public class Startup {
     private ServiceProviderEntitySessionBeanRemote serviceProviderEntitySessionBeanRemote;
     private AdminEntitySessionBeanRemote adminEntitySessionBeanRemote;
     private AppointmentEntitySessionBeanRemote appointmentEntitySessionBeanRemote;
+    private EmailSessionBeanRemote emailSessionBeanRemote;
     
     private ServiceProviderOperationMenu serviceProviderOperationMenu;
     private AdminOperationMenu adminOperationMenu;
@@ -46,13 +47,16 @@ public class Startup {
 
     public Startup() {
     }
-    
-    public Startup(CustomerEntitySessionBeanRemote customerEntitySessionBeanRemote, ServiceProviderEntitySessionBeanRemote serviceProviderEntitySessionBeanRemote, AdminEntitySessionBeanRemote adminEntitySessionBeanRemote, AppointmentEntitySessionBeanRemote appointmentEntitySessionBeanRemote) {
+
+    public Startup(CustomerEntitySessionBeanRemote customerEntitySessionBeanRemote, ServiceProviderEntitySessionBeanRemote serviceProviderEntitySessionBeanRemote, AdminEntitySessionBeanRemote adminEntitySessionBeanRemote, AppointmentEntitySessionBeanRemote appointmentEntitySessionBeanRemote, EmailSessionBeanRemote emailSessionBeanRemote) {
         this.customerEntitySessionBeanRemote = customerEntitySessionBeanRemote;
         this.serviceProviderEntitySessionBeanRemote = serviceProviderEntitySessionBeanRemote;
         this.adminEntitySessionBeanRemote = adminEntitySessionBeanRemote;
         this.appointmentEntitySessionBeanRemote = appointmentEntitySessionBeanRemote;
+        this.emailSessionBeanRemote = emailSessionBeanRemote;
     }
+    
+
     
     public void start() {
         initAppointment();
@@ -114,7 +118,7 @@ public class Startup {
                     if (response == 1) {
                         try {
                             login(entity);
-                            adminOperationMenu = new AdminOperationMenu(adminEntity, customerEntitySessionBeanRemote, serviceProviderEntitySessionBeanRemote, adminEntitySessionBeanRemote);
+                            adminOperationMenu = new AdminOperationMenu(adminEntity, customerEntitySessionBeanRemote, serviceProviderEntitySessionBeanRemote, adminEntitySessionBeanRemote, emailSessionBeanRemote);
                             adminOperationMenu.adminOperationMainMenu();
                             System.out.println("Login successful!");
                         } catch (InvalidLoginCredentialException ex) {

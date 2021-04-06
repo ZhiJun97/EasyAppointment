@@ -7,14 +7,19 @@ package easyappointmentclient;
 
 import ejb.session.stateless.AdminEntitySessionBeanRemote;
 import ejb.session.stateless.CustomerEntitySessionBeanRemote;
+import ejb.session.stateless.EmailSessionBeanRemote;
 import ejb.session.stateless.ServiceProviderEntitySessionBeanRemote;
 import entity.AdminEntity;
 import entity.AppointmentEntity;
 import entity.CustomerEntity;
 import entity.ServiceProviderEntity;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
+import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import util.exception.AdminNotFoundException;
@@ -24,6 +29,7 @@ import util.exception.ServiceProviderNotFoundException;
 import util.exception.ServiceProviderApproveException;
 import util.exception.ServiceProviderBlockedException;
 import static util.helper.StringUtil.*;
+import util.thread.RunnableNotification;
 
 /**
  *
@@ -35,15 +41,17 @@ public class AdminOperationMenu {
     private CustomerEntitySessionBeanRemote customerEntitySessionBeanRemote;
     private ServiceProviderEntitySessionBeanRemote serviceProviderEntitySessionBeanRemote;
     private AdminEntitySessionBeanRemote adminEntitySessionBeanRemote;
+    private EmailSessionBeanRemote emailSessionBeanRemote;
     
     public AdminOperationMenu() {
     }
 
-    public AdminOperationMenu(AdminEntity adminEntity, CustomerEntitySessionBeanRemote customerEntitySessionBeanRemote, ServiceProviderEntitySessionBeanRemote serviceProviderEntitySessionBeanRemote, AdminEntitySessionBeanRemote adminEntitySessionBeanRemote) {
+    public AdminOperationMenu(AdminEntity adminEntity, CustomerEntitySessionBeanRemote customerEntitySessionBeanRemote, ServiceProviderEntitySessionBeanRemote serviceProviderEntitySessionBeanRemote, AdminEntitySessionBeanRemote adminEntitySessionBeanRemote, EmailSessionBeanRemote emailSessionBeanRemote) {
         this.adminEntity = adminEntity;
         this.customerEntitySessionBeanRemote = customerEntitySessionBeanRemote;
         this.serviceProviderEntitySessionBeanRemote = serviceProviderEntitySessionBeanRemote;
         this.adminEntitySessionBeanRemote = adminEntitySessionBeanRemote;
+        this.emailSessionBeanRemote = emailSessionBeanRemote;
     }
     
     public void adminOperationMainMenu() {
@@ -87,7 +95,7 @@ public class AdminOperationMenu {
                 } else if (response == 7) {
                     removeBusinessCategory();
                 } else if (response == 8) {
-                    
+                    sendEmailNotification();
                 } else if (response == 9) {
                     break;
                 } else {
@@ -106,7 +114,7 @@ public class AdminOperationMenu {
         System.out.println("*** Admin terminal :: View Appointments for customers ***\n");
         
         while (true) {
-            System.out.print("Enter customer Id> \n");
+            System.out.print("Enter customer Id> ");
             
             try {
                 Long customerId = sc.nextLong();
@@ -142,12 +150,12 @@ public class AdminOperationMenu {
         System.out.println("*** Admin terminal :: View Appointments for service providers ***");
         
         while (true) {
-            System.out.print("Enter customer Id> \n");
+            System.out.print("Enter service provider Id> ");
             
             try {
                 Long serviceProviderId = sc.nextLong();
                 //exit if 0
-                if (serviceProviderId.equals(0)) {
+                if (serviceProviderId.equals(0L)) {
                     break;
                 }
                 serviceProviderEntity = serviceProviderEntitySessionBeanRemote.retrieveServiceProviderByUniqueIdNumber(serviceProviderId);
@@ -308,6 +316,51 @@ public class AdminOperationMenu {
             }
             catch (InputMismatchException ex) {
                 System.out.println("Please enter a valid input!");
+            }
+        }
+    }
+    
+    public void sendEmailNotification() {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("*** Admin terminal :: Send reminder email ***\n");
+        System.out.println("Enter 0 to go back to the previous menu");
+        System.out.print("Enter customer Id> ");
+        Date currentDateTime = new Date();
+        while (true) {
+            System.out.println("Enter 0 to go back to the previous menu.");
+            System.out.print("Enter customer Id> ");
+            try {
+                Long customerId = sc.nextLong();
+                //exit if input 0
+                if (customerId.equals(0L)) {
+                    break;
+                }
+                CustomerEntity customerEntity = customerEntitySessionBeanRemote.retrieveCustomerById(customerId);      
+                List<AppointmentEntity> appointmentList = customerEntity.getAppointmentEntity();   
+                ArrayList<Date> appointmentDate = new ArrayList<Date>();
+                appointmentDate.add(currentDateTime);
+                for (AppointmentEntity appointmentEntity : appointmentList) {
+                    appointmentDate.add(appointmentEntity.getAppointmentTime());
+                }
+                Collections.sort(appointmentDate);
+                int i = appointmentDate.indexOf(currentDateTime);
+                if (appointmentDate.size() == i + 1) {
+                    System.out.println("There are no new appointments to " + customerEntity.getFirstName() + " " + customerEntity.getLastName());
+                } else {
+                    try {
+                        Date nextAppointment = appointmentDate.get(i + 1);
+                        Future<Boolean> asyncResult = emailSessionBeanRemote.emailCheckoutNotificationAsync(nextAppointment, "zhijun83@gmail.com", "angzhijun@hotmail.com");
+                        RunnableNotification runnableNotification = new RunnableNotification(asyncResult);
+                        runnableNotification.start();
+                        System.out.println("An email is sent to " + customerEntity.getFirstName() + " " + customerEntity.getLastName() + " for the appointment " + nextAppointment);
+                    }
+                    catch (Exception ex) {
+                        System.out.println("An error occured while sending out the reminder email! " + ex.getMessage());
+                    }
+                }
+            }
+            catch (CustomerNotFoundException ex) {
+                System.out.println("Error sending email! " + ex.getMessage());
             }
         }
     }

@@ -8,6 +8,7 @@ package easyappointmentclient;
 import ejb.session.stateless.AdminEntitySessionBeanRemote;
 import ejb.session.stateless.AppointmentEntitySessionBeanRemote;
 import ejb.session.stateless.CustomerEntitySessionBeanRemote;
+import ejb.session.stateless.EmailSessionBeanRemote;
 import ejb.session.stateless.ServiceProviderEntitySessionBeanRemote;
 import javax.ejb.EJB;
 
@@ -25,9 +26,11 @@ public class Main {
     private static AdminEntitySessionBeanRemote adminEntitySessionBeanRemote;
     @EJB
     private static AppointmentEntitySessionBeanRemote appointmentEntitySessionBeanRemote;
+    @EJB
+    private static EmailSessionBeanRemote emailSessionBeanRemote;
     
     public static void main(String[] args) {
-        Startup startup = new Startup(customerEntitySessionBeanRemote, serviceProviderEntitySessionBeanRemote, adminEntitySessionBeanRemote, appointmentEntitySessionBeanRemote);
+        Startup startup = new Startup(customerEntitySessionBeanRemote, serviceProviderEntitySessionBeanRemote, adminEntitySessionBeanRemote, appointmentEntitySessionBeanRemote, emailSessionBeanRemote);
         startup.start();
     }
     
