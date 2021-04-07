@@ -5,6 +5,7 @@
  */
 package entity;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Column;
@@ -19,7 +20,7 @@ import javax.persistence.OneToMany;
  * @author ryanl
  */
 @Entity
-public class CustomerEntity {
+public class CustomerEntity implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

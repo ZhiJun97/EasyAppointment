@@ -18,7 +18,7 @@ public interface CustomerEntitySessionBeanRemote {
     public Long createCustomerEntity(CustomerEntity newCustomerEntity);
     public CustomerEntity retrieveCustomerById(Long Id) throws CustomerNotFoundException;
     public CustomerEntity retrieveCustomerByEmail(String emailAddress) throws CustomerNotFoundException;
-    public CustomerEntity customerLogin(String emailAddress, String password) throws InvalidLoginCredentialException;
+    public CustomerEntity loginCustomer(String emailAddress, String password) throws InvalidLoginCredentialException;
     public void updateCustomerEntity(CustomerEntity customerEntity);
     public void deleteCustomerEntity(Long Id) throws CustomerNotFoundException;
     

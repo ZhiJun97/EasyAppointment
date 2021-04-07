@@ -63,7 +63,7 @@ public class CustomerEntitySessionBean implements CustomerEntitySessionBeanRemot
     }
     
     @Override
-    public CustomerEntity customerLogin(String emailAddress, String password) throws InvalidLoginCredentialException {
+    public CustomerEntity loginCustomer(String emailAddress, String password) throws InvalidLoginCredentialException {
         try {
             CustomerEntity customerEntity = retrieveCustomerByEmail(emailAddress);
             if(customerEntity.getPassword().equals(password)) {              

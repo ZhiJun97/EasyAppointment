@@ -5,9 +5,11 @@
  */
 package easyappointmentclient;
 
+import ejb.session.stateless.AdminEntitySessionBeanRemote;
 import ejb.session.stateless.AppointmentEntitySessionBeanRemote;
 import ejb.session.stateless.CustomerEntitySessionBeanRemote;
 import ejb.session.stateless.ServiceProviderEntitySessionBeanRemote;
+import entity.AdminEntity;
 import entity.AppointmentEntity;
 import entity.CustomerEntity;
 import entity.ServiceProviderEntity;
@@ -22,6 +24,8 @@ import java.util.logging.Logger;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
+import util.enumeration.StatusEnum;
+import util.exception.AdminNotFoundException;
 import util.exception.ServiceProviderNotFoundException;
 import util.helper.DateUtil;
 
@@ -35,9 +39,14 @@ public class CustomerOperationMenu {
     private ServiceProviderEntitySessionBeanRemote serviceProviderEntitySessionBeanRemote;
     private CustomerEntitySessionBeanRemote customerEntitySessionBeanRemote;
     private AppointmentEntitySessionBeanRemote appointmentEntitySessionBeanRemote;
+    private AdminEntitySessionBeanRemote adminEntitySessionBeanRemote;
     
-    public CustomerOperationMenu(CustomerEntity customerEntity) {
+    public CustomerOperationMenu(CustomerEntity customerEntity, ServiceProviderEntitySessionBeanRemote serviceProviderEntitySessionBeanRemote, CustomerEntitySessionBeanRemote customerEntitySessionBeanRemote, AppointmentEntitySessionBeanRemote appointmentEntitySessionBeanRemote,AdminEntitySessionBeanRemote adminEntitySessionBeanRemote) {
         this.customerEntity = customerEntity;
+        this.serviceProviderEntitySessionBeanRemote = serviceProviderEntitySessionBeanRemote;
+        this.customerEntitySessionBeanRemote = customerEntitySessionBeanRemote;
+        this.appointmentEntitySessionBeanRemote = appointmentEntitySessionBeanRemote;
+        this.adminEntitySessionBeanRemote = adminEntitySessionBeanRemote;
     }
     
     public void customerOperationMainMenu() {
@@ -46,7 +55,7 @@ public class CustomerOperationMenu {
         
         while (true) {
             System.out.println("*** Customer terminal :: Main ***\n");
-            System.out.println("You are login as " + customerEntity.getFirstName() + customerEntity.getLastName());
+            System.out.println("You are login as " + customerEntity.getFirstName() + " " + customerEntity.getLastName());
             System.out.println("1: Search Operation");
             System.out.println("2: Add Appointment");
             System.out.println("3: View Appointments");
@@ -67,9 +76,9 @@ public class CustomerOperationMenu {
                 } else if (response == 2) {
                     doAddAppointment();
                 } else if (response == 3) {
-                    
+                    doViewAppointment();
                 } else if (response == 4) {
-
+                    doCancelAppointment();
                 } else if (response == 5) {
 
                 } else if (response == 6) {
@@ -88,22 +97,25 @@ public class CustomerOperationMenu {
         Scanner sc = new Scanner(System.in);
         System.out.println("*** Customer terminal :: Search ***\n");
         
-        System.out.println("1 Health | 2 Fashion | 3 Education");
+        // System.out.println("1 Health | 2 Fashion | 3 Education");
+        AdminEntity admin = adminEntitySessionBeanRemote.retrieveAdminById(1l);
+        List<String> categories = admin.getBusinessCategory();
+        if (categories.size() == 0) {
+            System.out.println("Admin has not update category list.");
+            return new Date();
+        }
+        for (int i = 1; i <= categories.size(); i++) {
+            String s = categories.get(i - 1);
+            if (categories.indexOf(s) == categories.size() - 1) {
+                System.out.println(i + " " + s);
+            } else {
+                System.out.print(i + " " + s + " | ");
+            }
+        }
         System.out.print("Enter business category> ");
         Integer businessCategory = sc.nextInt();
         sc.nextLine();
-        String category = "";
-        switch (businessCategory) {
-            case 1:
-                category = "Health";
-                break;
-            case 2:
-                category = "Fashion";
-                break;
-            case 3:
-                category = "Education";
-                break;
-        }
+        String category = categories.get(businessCategory - 1);
         System.out.print("Enter city> ");
         String city = sc.nextLine().trim();
         System.out.print("Enter date (YYYY-MM-DD)> ");
@@ -118,11 +130,14 @@ public class CustomerOperationMenu {
             dateProcessed = processDate(date);
         }
         // get list of appointments of all service providers
+        if (serviceProviderEntitySessionBeanRemote == null) {
+            System.out.println("SPSB is null");
+        }
         List<ServiceProviderEntity> serviceProviders = serviceProviderEntitySessionBeanRemote.retrieveAllServiceProvider();
         // check if service provider is full on that day, if full, remove from list
         for (ServiceProviderEntity s : serviceProviders) {
             // remove serviceProvider that does not match desired category
-            if (!s.getBusinessCategory().equals(category)) {
+            if (!s.getBusinessCategory().equals(category) || !s.getCity().equals(city) || s.getStatusEnum() == StatusEnum.PENDING || s.getStatusEnum() == StatusEnum.BLOCK) {
                 serviceProviders.remove(s);
             }
             // get list of appointments for each service provider
@@ -169,6 +184,9 @@ public class CustomerOperationMenu {
         System.out.print("Service provider Id> ");
         Long serviceProviderId = sc.nextLong();
         sc.nextLine();
+        if (serviceProviderId.equals(1l)) {
+            return;
+        }
         
         // show customer the service providers available slots
         ArrayList<Integer> slots = new ArrayList<>(Arrays.asList(8, 9, 10, 12, 13, 14, 16, 17));
@@ -194,6 +212,9 @@ public class CustomerOperationMenu {
             System.out.println("Enter 0 to go back to the previous menu.");
             System.out.print("Enter time> ");
             String time = sc.nextLine().trim();
+            if (time.equals("0")) {
+                return;
+            }
             
             Date processedTime = processTime(date, time);
             // check if serviceProvider is available during time entered
@@ -224,6 +245,54 @@ public class CustomerOperationMenu {
         } catch (ServiceProviderNotFoundException e) {
             
         }
+    }
+    
+    public void doViewAppointment() {
+        List<AppointmentEntity> appointments = customerEntity.getAppointmentEntity();
+        System.out.println("Service Provider Name | Business Category | Appointment Date | Appointment Time | Appointment Number");
+        for (AppointmentEntity a : appointments) {
+            ServiceProviderEntity serviceProvider = a.getServiceProviderEntity();
+            ArrayList<String> info = new ArrayList<>();
+            info.add(serviceProvider.getName());
+            info.add(serviceProvider.getBusinessCategory());
+            info.add(a.getAppointmentDate().toString());
+            info.add(a.getAppointmentTime().toString());
+            info.add(a.getAppointmentNo());
+            for (String s : info) {
+                if (info.indexOf(s) == info.size() - 1) {
+                    System.out.println(s);
+                } else {
+                    System.out.print(s + " | ");
+                }
+            }
+        }
+    }
+    
+    public void doCancelAppointment() {
+        Scanner sc = new Scanner(System.in);
+        
+        doViewAppointment();
+        
+        System.out.println("Enter 0 to go back to the previous menu.");
+        System.out.print("Appointment Number> ");
+        String appointmentNo = sc.nextLine().trim();
+        if (appointmentNo.equals("0")) {
+            return;
+        }
+        AppointmentEntity appointment = appointmentEntitySessionBeanRemote.retrieveAppointmentByAppointmentNo(appointmentNo);
+        // remove appointment from db
+        appointmentEntitySessionBeanRemote.deleteAppointment(appointment.getAppointmentId());
+        // remove appointment from customer
+        List<AppointmentEntity> customerAppointments = customerEntity.getAppointmentEntity();
+        customerAppointments.remove(appointment);
+        customerEntity.setAppointmentEntity(customerAppointments);
+        customerEntitySessionBeanRemote.updateCustomerEntity(customerEntity);
+        // remove appointment from SP
+        ServiceProviderEntity serviceProvider = appointment.getServiceProviderEntity();
+        List<AppointmentEntity> serviceProviderAppointments = serviceProvider.getAppointmentEntity();
+        serviceProviderAppointments.remove(appointment);
+        serviceProvider.setAppointmentEntity(serviceProviderAppointments);
+        serviceProviderEntitySessionBeanRemote.updateServiceProviderEntity(serviceProvider);
     }
     
     public Date processTime(Date date, String time) {

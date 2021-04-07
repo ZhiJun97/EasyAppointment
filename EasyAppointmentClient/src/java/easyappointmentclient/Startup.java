@@ -55,7 +55,7 @@ public class Startup {
     }
     
     public void start() {
-        initAppointment();
+        // initAppointment();
         Scanner sc = new Scanner(System.in);
         Integer response = 0;
         
@@ -192,7 +192,7 @@ public class Startup {
                     if (response == 2) {
                         try {
                             login(entity);
-                            customerOperationMenu = new CustomerOperationMenu(customerEntity);
+                            customerOperationMenu = new CustomerOperationMenu(customerEntity, serviceProviderEntitySessionBeanRemote, customerEntitySessionBeanRemote, appointmentEntitySessionBeanRemote, adminEntitySessionBeanRemote);
                             customerOperationMenu.customerOperationMainMenu();
                             System.out.println("Login successful!");
                         } catch (InvalidLoginCredentialException ex) {
@@ -235,7 +235,7 @@ public class Startup {
             }
         } if (entity.equals("Customer")) {
             if (email.length() > 0 && password.length() > 0) {
-                customerEntity = customerEntitySessionBeanRemote.customerLogin(email, password);
+                customerEntity = customerEntitySessionBeanRemote.loginCustomer(email, password);
             } else {
                 throw new InvalidLoginCredentialException("Missing login credentials");
             }
